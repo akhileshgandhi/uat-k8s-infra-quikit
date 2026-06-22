@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dex
+  namespace: quikit
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: dex
+
+  template:
+    metadata:
+      labels:
+        app: dex
+
+    spec:
+      containers:
+      - name: dex
+        image: ghcr.io/dexidp/dex:v2.42.0
+
+        args:
+        - dex
+        - serve
+        - /etc/dex/config.yaml
+
+        ports:
+        - name: http
+          containerPort: 5554
+
+        volumeMounts:
+        - name: config
+          mountPath: /etc/dex
+
+      volumes:
+      - name: config
+        configMap:
+          name: dex-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dex
+  namespace: quikit
+
+spec:
+  selector:
+    app: dex
+
+  ports:
+  - name: http
+    port: 5554
+    targetPort: 5554
+
+  type: ClusterIP

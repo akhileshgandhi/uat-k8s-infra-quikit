@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quikvc-deployment
+  namespace: quikit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quikvc
+  template:
+    metadata:
+      labels:
+        app: quikvc
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: quikvc
+          image: ghcr.io/ashwinsingone-pm/quikit-vc:latest
+          ports:
+            - containerPort: 3008
+          envFrom:
+            - secretRef:
+                name: quikit-secrets
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatcrm.quikit.ai"
+            - name: NEXT_PUBLIC_AUTH_URL
+              value: "https://uatquikauth.quikit.ai"
+            - name: QUIKIT_URL
+              value: "https://uatquiklauncher.quikit.ai"
+            - name: NEXT_PUBLIC_LAUNCHER_URL
+              value: "https://uatquiklauncher.quikit.ai/apps"
+            - name: QUIKIT_CLIENT_ID
+              value: "quikvc"
+            - name: QUIKIT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: quikit-secrets
+                  key: QUIKVC_CLIENT_SECRET
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3008
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3008
+            initialDelaySeconds: 15
+            periodSeconds: 10

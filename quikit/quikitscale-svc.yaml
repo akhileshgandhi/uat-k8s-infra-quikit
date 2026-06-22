@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quikscale-service
+  namespace: quikit
+  annotations:
+    cloud.google.com/backend-config: '{"default": "quikit-backend-config"}'
+spec:
+  selector:
+    app: quikscale
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
+  type: NodePort

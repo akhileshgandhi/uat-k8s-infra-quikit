@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quikit-deployment
+  namespace: quikit
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quikit
+  template:
+    metadata:
+      labels:
+        app: quikit
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: quikit
+          image: ghcr.io/ashwinsingone-pm/quikit-runtime:sha-597eacf
+          ports:
+            - containerPort: 3000
+          # quikit is the OAuth IdP — needs JWT_SIGNING_KEY[+_PUBLIC], all
+          # OAuth provider creds, every sub-app's launcher tile URL, etc.
+          # All come from quikit-secrets + quikit-config.
+          envFrom:
+            - secretRef:
+                name: quikit-secrets
+            - configMapRef:
+                name: quikit-config
+          # Per-pod value: this pod's own NEXTAUTH_URL (the launcher's host).
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatapps.quikit.ai"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10

@@ -1,0 +1,4 @@
+readme.md
+configmap/secret.yaml
+dex/config.yaml
+*.secret.yaml

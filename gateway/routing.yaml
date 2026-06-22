@@ -1,0 +1,178 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-admin
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uatorgadmin.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: admin-service
+      port: 3002
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-authn
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uatauthn.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: auth-service
+      port: 3001
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-apps
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uatapps.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: quikit-service
+      port: 3000
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-scale
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uatscale.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: quikscale-service
+      port: 3003
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-track
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uattrack.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: quiktrack-service
+      port: 3004
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-infra
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uatinfra.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: quikconstruction-service
+      port: 3006
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: dex-route
+  namespace: quikit
+
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+
+  hostnames:
+  - k8sauth.moreyeahs.in
+
+  rules:
+  - backendRefs:
+    - name: dex
+      port: 5554
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-crm
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: prod-gateway
+    namespace: quikit
+  hostnames:
+  - uatcrm.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: crm-service
+      port: 3008
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd-route
+  namespace: argocd
+spec:
+  parentRefs:
+    - name: prod-gateway
+      namespace: quikit
+
+  hostnames:
+    - uatargocd.moreyeahs.in
+
+  rules:
+    - backendRefs:
+        - name: argocd-server
+          port: 80

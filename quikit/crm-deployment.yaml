@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-deployment
+  namespace: quikit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crm
+  template:
+    metadata:
+      labels:
+        app: crm
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: crm
+          image: ghcr.io/ashwinsingone-pm/quikcrm-runtime:sha-ec38007
+          ports:
+            - containerPort: 3008
+          # Cluster-wide envs (DATABASE_URL, NEXTAUTH_SECRET, SMTP_*, OAuth
+          # creds, AUTH_CORS_ORIGINS, JWT_*, NEXT_PUBLIC_* shared URLs)
+          # come from quikit-secrets + quikit-config.
+          envFrom:
+            - secretRef:
+                name: quikit-secrets
+            - configMapRef:
+                name: quikit-config
+          # Per-pod values (this pod's own NEXTAUTH_URL).
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatcrm.quikit.ai"
+            - name: NEXT_PUBLIC_QUIKCRM_URL
+              value: "https://uatcrm.quikit.ai"
+            # - name: JWT_SECRET
+            #   value: "7ynQaE7hcVrogq9q7OdIQTnCaeg+uPLeqXELLAWQ7LE="
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3008
+            initialDelaySeconds: 90
+            timeoutSeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3008
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 15

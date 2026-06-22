@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quikvc-service
+  namespace: quikit
+  annotations:
+    cloud.google.com/backend-config: '{"default": "quikit-backend-config"}'
+spec:
+  selector:
+    app: quikvc
+  ports:
+    - protocol: TCP
+      port: 3008
+      targetPort: 3008
+  type: NodePort

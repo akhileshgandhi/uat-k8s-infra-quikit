@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiksocial-deployment
+  namespace: quikit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quiksocial
+  template:
+    metadata:
+      labels:
+        app: quiksocial
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: quiksocial
+          image: ghcr.io/ashwinsingone-pm/quikit-social:sha-9e351bf
+          ports:
+            - containerPort: 3006
+          envFrom:
+            - secretRef:
+                name: quikit-secrets
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatsocial.quikit.ai"
+            - name: NEXT_PUBLIC_AUTH_URL
+              value: "https://uatquikauth.quikit.ai"
+            - name: QUIKIT_URL
+              value: "https://uatquiklauncher.quikit.ai"
+            - name: NEXT_PUBLIC_LAUNCHER_URL
+              value: "https://uatquiklauncher.quikit.ai/apps"
+            - name: NEXT_PUBLIC_QUIKIT_URL
+              value: "https://uatquiklauncher.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quiksocial"
+            - name: QUIKIT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: quikit-secrets
+                  key: QUIKSOCIAL_CLIENT_SECRET
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3006
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3006
+            initialDelaySeconds: 15
+            periodSeconds: 10

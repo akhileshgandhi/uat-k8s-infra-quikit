@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: db
+spec:
+  serviceName: redis-headless
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: redis
+
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker2
+
+      containers:
+      - name: redis
+        image: redis:7.2
+
+        command:
+          - redis-server
+          - /usr/local/etc/redis/redis.conf
+
+        ports:
+        - containerPort: 6379
+
+        volumeMounts:
+        - name: redis-config
+          mountPath: /usr/local/etc/redis
+
+        - name: redis-data
+          mountPath: /data
+
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
+
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      storageClassName: local-path
+      accessModes:
+        - ReadWriteOnce
+
+      resources:
+        requests:
+          storage: 1Gi

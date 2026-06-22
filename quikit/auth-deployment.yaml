@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  namespace: quikit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: auth
+          image: ghcr.io/ashwinsingone-pm/auth-runtime:sha-597eacf
+          ports:
+            - containerPort: 3001
+          # Cluster-wide envs (DATABASE_URL, NEXTAUTH_SECRET, SMTP_*, OAuth
+          # creds, AUTH_CORS_ORIGINS, JWT_*, NEXT_PUBLIC_* shared URLs)
+          # come from quikit-secrets + quikit-config.
+          envFrom:
+            - secretRef:
+                name: quikit-secrets
+            - configMapRef:
+                name: quikit-config
+          # Per-pod values (this pod's own NEXTAUTH_URL).
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatauthn.quikit.ai"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3001
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3001
+            initialDelaySeconds: 15
+            periodSeconds: 10

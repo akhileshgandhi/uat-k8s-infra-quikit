@@ -1,0 +1,11 @@
+global:
+  cloud: others
+  clusterName: on-prem-cluster
+  deploymentEnvironment: UAT
+otelCollectorEndpoint: http://192.168.1.110:4318
+otelInsecure: true
+presets:
+  otlphttpExporter:
+    enabled: true
+  loggingExporter:
+    enabled: false

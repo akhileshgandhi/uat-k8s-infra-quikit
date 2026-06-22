@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: uatk8s-cert
+  namespace: quikit
+spec:
+  secretName: uatk8s-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - uatk8s.quikit.ai

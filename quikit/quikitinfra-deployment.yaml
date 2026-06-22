@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quikconstruction-deployment
+  namespace: quikit
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quikconstruction
+  template:
+    metadata:
+      labels:
+        app: quikconstruction
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: quikconstruction
+          image: ghcr.io/ashwinsingone-pm/quikinfra-runtime:sha-ec38007
+          ports:
+            - containerPort: 3006
+          envFrom:
+            - secretRef:
+                name: quikit-secrets
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatinfra.quikit.ai"
+            - name: NEXT_PUBLIC_AUTH_URL
+              value: "https://uatauthn.quikit.ai"
+            - name: QUIKIT_URL
+              value: "https://uatapps.quikit.ai"
+            - name: NEXT_PUBLIC_LAUNCHER_URL
+              value: "https://uatapps.quikit.ai"
+            - name: NEXT_PUBLIC_QUIKINFRA_URL
+              value: "https://uatinfra.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quikinfra"
+            - name: PORT
+              value: "3006"
+            - name: QUIKIT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: quikit-secrets
+                  key: QUIKCONSTRUCTION_CLIENT_SECRET
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3006
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3006
+            initialDelaySeconds: 15
+            periodSeconds: 10
