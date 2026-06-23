@@ -2,3 +2,8 @@ readme.md
 configmap/secret.yaml
 dex/config.yaml
 *.secret.yaml
+
+
+# Unseal Key 1: NlwdqPM7zkX3Dj4ox4RzoQl3EZBdBPBn8qm0fuAvXON1
+# Unseal Key 2: lpKlMhaHaRY7vMemEOWOHzwC1zWh0EozyVhLEWTvGzMz
+# Unseal Key 3: YwJb6tDurUjmJQL1AnL5WN5snFwecW6JdmJQlVRrsxK8
