@@ -22,7 +22,7 @@ spec:
   template:
     metadata:
       labels:
-        app: admin
+        app: admin 
 
       annotations:
         vault.hashicorp.com/agent-inject: "true"
