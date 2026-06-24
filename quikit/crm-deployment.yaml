@@ -4,7 +4,7 @@ metadata:
   name: crm-deployment
   namespace: quikit
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: crm
