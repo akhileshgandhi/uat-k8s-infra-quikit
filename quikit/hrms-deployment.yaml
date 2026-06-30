@@ -13,7 +13,7 @@ spec:
       labels:
         app: hrms
       
-            annotations:
+      annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
