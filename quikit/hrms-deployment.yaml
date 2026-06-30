@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: quikscale-deployment
+  name: hrms-deployment
   namespace: quikit
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: quikscale
+      app: hrms
   template:
     metadata:
       labels:
-        app: quikscale
+        app: hrms
       
-      annotations:
+            annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
@@ -50,6 +50,10 @@ spec:
           export GEMINI_API_KEY_1="{{ .Data.data.GEMINI_API_KEY_1 }}"
           export GEMINI_API_KEY_2="{{ .Data.data.GEMINI_API_KEY_2 }}"
           export GEMINI_API_KEY_3="{{ .Data.data.GEMINI_API_KEY_3 }}"
+          export OPENROUTER_API_KEY="{{ .Data.data.OPENROUTER_API_KEY }}"
+          export OPENROUTER_ATS_MODEL="{{ .Data.data.OPENROUTER_ATS_MODEL }}"
+          export OPENROUTER_APP_URL="{{ .Data.data.OPENROUTER_APP_URL }}"
+          export OPENROUTER_APP_TITLE="{{ .Data.data.OPENROUTER_APP_TITLE }}"
           export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
@@ -58,8 +62,8 @@ spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: quikscale
-          image: ghcr.io/akhileshgandhi/quikscale-runtime:sha-5d47d3f
+        - name: hrms
+          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-5d47d3f
 
           command:
             - /bin/sh
@@ -68,32 +72,22 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
-              cd /app/apps/quikscale
+              cd /app/apps/quikhrms
               exec node server.js
 
-
           ports:
-            - containerPort: 3003
-          # quikscale's email module reads EMAIL_USER / EMAIL_PASSWORD_B64
-          # (outlier from the SMTP_* convention used by every other app).
-          # Both come from quikit-secrets.
+            - containerPort: 3009
+          # AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY come from
+          # quikit-secrets; AWS_REGION + AWS_S3_BUCKET come from
+          # quikit-config (non-secret).
           envFrom:
-
             - configMapRef:
                 name: quikit-config
           env:
             - name: NEXTAUTH_URL
-              value: "https://uatscale.quikit.ai"
-            # - name: NEXT_PUBLIC_QUIKSCALE_URL
-            #   value: "https://scale.quikit.ai"
-            # OAuth sub-app identity.
-            - name: QUIKIT_CLIENT_ID
-              value: "quikscale"
-            # - name: QUIKIT_CLIENT_SECRET
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: quikit-secrets
-            #       key: QUIKSCALE_CLIENT_SECRET
+              value: "https://uatpeople.quikit.ai"
+            - name: NEXT_PUBLIC_QUIKHRMS_URL
+              value: "https://uatpeople.quikit.ai"
           resources:
             limits:
               cpu: "500m"
@@ -104,12 +98,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: 3003
+              port: 3009
             initialDelaySeconds: 45
             periodSeconds: 20
           readinessProbe:
             httpGet:
               path: /api/health
-              port: 3003
+              port: 3009
             initialDelaySeconds: 15
             periodSeconds: 10
