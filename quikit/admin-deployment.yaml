@@ -69,7 +69,7 @@ spec:
       containers:
         - name: admin
 
-          image: ghcr.io/akhileshgandhi/admin-runtime:sha-5d47d3f
+          image: ghcr.io/akhileshgandhi/admin-runtime:sha-9b4c274
 
           command:
             - /bin/sh

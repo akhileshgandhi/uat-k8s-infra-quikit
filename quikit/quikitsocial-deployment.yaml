@@ -54,7 +54,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quiksocial
-          image: ghcr.io/akhileshgandhi/quikit-social:sha-5d47d3f
+          image: ghcr.io/akhileshgandhi/quikit-social:sha-9b4c274
 
           command:
             - /bin/sh
