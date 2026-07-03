@@ -57,7 +57,7 @@ spec:
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
     spec:
-      serviceAccountName: auth-service
+      # serviceAccountName: auth-service
       imagePullSecrets:
         - name: ghcr-secret
       containers:
