@@ -12,14 +12,11 @@ spec:
     metadata:
       labels:
         app: hrms
-      
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-
         vault.hashicorp.com/agent-inject-template-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
           export ADMIN_CLIENT_SECRET="{{ .Data.data.ADMIN_CLIENT_SECRET }}"
@@ -57,14 +54,12 @@ spec:
           export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
         - name: hrms
-          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-82070fe
-
+          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-5f71bda
           command:
             - /bin/sh
             - -c
@@ -74,7 +69,6 @@ spec:
               set +a
               cd /app/apps/quikhrms
               exec node server.js
-
           ports:
             - containerPort: 3009
           # AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY come from

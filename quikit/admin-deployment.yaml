@@ -3,34 +3,31 @@ kind: ServiceAccount
 metadata:
   name: auth-service
   namespace: quikit
-
+spec:
+  template:
+    spec:
+      containers:
+        - image: ghcr.io/akhileshgandhi/admin-runtime:sha-5f71bda
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: admin-deployment
   namespace: quikit
-
 spec:
   replicas: 2
-
   selector:
     matchLabels:
       app: admin
-
   template:
     metadata:
       labels:
-        app: admin 
-
+        app: admin
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-
         vault.hashicorp.com/agent-inject-template-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
           export ADMIN_CLIENT_SECRET="{{ .Data.data.ADMIN_CLIENT_SECRET }}"
@@ -59,18 +56,13 @@ spec:
           export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
-
     spec:
       serviceAccountName: auth-service
-
       imagePullSecrets:
         - name: ghcr-secret
-
       containers:
         - name: admin
-
-          image: ghcr.io/akhileshgandhi/admin-runtime:sha-82070fe
-
+          image: ghcr.io/akhileshgandhi/admin-runtime:sha-5f71bda
           command:
             - /bin/sh
             - -c
@@ -80,42 +72,32 @@ spec:
               set +a
               cd /app/apps/admin
               exec node server.js
-
           ports:
             - containerPort: 3002
-
           envFrom:
             - configMapRef:
                 name: quikit-config
-
           env:
             - name: NEXTAUTH_URL
               value: "https://uatorgadmin.quikit.ai"
-
             - name: QUIKIT_CLIENT_ID
               value: "admin"
-
           resources:
             limits:
               cpu: "500m"
               memory: "512Mi"
-
             requests:
               cpu: "200m"
               memory: "256Mi"
-
           livenessProbe:
             httpGet:
               path: /api/health
               port: 3002
-
             initialDelaySeconds: 45
             periodSeconds: 20
-
           readinessProbe:
             httpGet:
               path: /api/health
               port: 3002
-
             initialDelaySeconds: 15
             periodSeconds: 10

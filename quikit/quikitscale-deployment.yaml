@@ -12,14 +12,11 @@ spec:
     metadata:
       labels:
         app: quikscale
-      
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-
         vault.hashicorp.com/agent-inject-template-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
           export ADMIN_CLIENT_SECRET="{{ .Data.data.ADMIN_CLIENT_SECRET }}"
@@ -53,14 +50,12 @@ spec:
           export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
         - name: quikscale
-          image: ghcr.io/akhileshgandhi/quikscale-runtime:sha-9bf0083
-
+          image: ghcr.io/akhileshgandhi/quikscale-runtime:sha-5f71bda
           command:
             - /bin/sh
             - -c
@@ -70,15 +65,12 @@ spec:
               set +a
               cd /app/apps/quikscale
               exec node server.js
-
-
           ports:
             - containerPort: 3003
           # quikscale's email module reads EMAIL_USER / EMAIL_PASSWORD_B64
           # (outlier from the SMTP_* convention used by every other app).
           # Both come from quikit-secrets.
           envFrom:
-
             - configMapRef:
                 name: quikit-config
           env:
@@ -89,11 +81,11 @@ spec:
             # OAuth sub-app identity.
             - name: QUIKIT_CLIENT_ID
               value: "quikscale"
-            # - name: QUIKIT_CLIENT_SECRET
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: quikit-secrets
-            #       key: QUIKSCALE_CLIENT_SECRET
+              # - name: QUIKIT_CLIENT_SECRET
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: quikit-secrets
+              #       key: QUIKSCALE_CLIENT_SECRET
           resources:
             limits:
               cpu: "500m"

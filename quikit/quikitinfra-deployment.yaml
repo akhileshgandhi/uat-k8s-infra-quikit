@@ -12,15 +12,11 @@ spec:
     metadata:
       labels:
         app: quikconstruction
-      
-      
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-
         vault.hashicorp.com/agent-inject-template-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
           export ADMIN_CLIENT_SECRET="{{ .Data.data.ADMIN_CLIENT_SECRET }}"
@@ -50,15 +46,12 @@ spec:
           export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
-
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
         - name: quikconstruction
-          image: ghcr.io/akhileshgandhi/quikinfra-runtime:sha-82070fe
-
+          image: ghcr.io/akhileshgandhi/quikinfra-runtime:sha-5f71bda
           command:
             - /bin/sh
             - -c
@@ -68,11 +61,9 @@ spec:
               set +a
               cd /app/apps/quikinfra
               exec node server.js
-
-
           ports:
             - containerPort: 3006
-          envFrom:           
+          envFrom:
             - configMapRef:
                 name: quikit-config
           env:
@@ -90,7 +81,6 @@ spec:
               value: "quikinfra"
             - name: PORT
               value: "3006"
-          
           resources:
             limits:
               cpu: "500m"
