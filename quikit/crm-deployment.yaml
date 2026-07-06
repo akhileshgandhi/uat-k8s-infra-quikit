@@ -42,6 +42,10 @@ spec:
           export SMTP_PASS="{{ .Data.data.SMTP_PASS }}"
           export SMTP_PORT="{{ .Data.data.SMTP_PORT }}"
           export SMTP_USER="{{ .Data.data.SMTP_USER }}"
+          export GCS_CLIENT_EMAIL="{{ .Data.data.GCS_CLIENT_EMAIL }}"
+          export GCS_BUCKET="{{ .Data.data.GCS_BUCKET }}"
+          export GCS_PROJECT_ID="{{ .Data.data.GCS_PROJECT_ID }}"
+          export GCS_PRIVATE_KEY="{{ .Data.data.GCS_PRIVATE_KEY }}'
           export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
