@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support-deployment
+  namespace: quikit
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: support
+  template:
+    metadata:
+      labels:
+        app: support
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "global-role"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{- with secret "secret/data/quikit/auth-service" -}}
+          export ADMIN_CLIENT_SECRET="{{ .Data.data.ADMIN_CLIENT_SECRET }}"
+          export AUTH_ALLOWED_RETURN_ORIGINS="{{ .Data.data.AUTH_ALLOWED_RETURN_ORIGINS }}"
+          export AUTH_CORS_ORIGINS="{{ .Data.data.AUTH_CORS_ORIGINS }}"
+          export DATABASE_URL="{{ .Data.data.DATABASE_URL }}"
+          export DATABASE_URL_DIRECT="{{ .Data.data.DATABASE_URL_DIRECT }}"
+          export EMAIL_PASSWORD="{{ .Data.data.EMAIL_PASSWORD }}"
+          export EMAIL_PASSWORD_B64="{{ .Data.data.EMAIL_PASSWORD_B64 }}"
+          export EMAIL_USER="{{ .Data.data.EMAIL_USER }}"
+          export GOOGLE_CLIENT_ID="{{ .Data.data.GOOGLE_CLIENT_ID }}"
+          export GOOGLE_CLIENT_SECRET="{{ .Data.data.GOOGLE_CLIENT_SECRET }}"
+          export INTERNAL_SECRET="{{ .Data.data.INTERNAL_SECRET }}"
+          export META_APP_ID="{{ .Data.data.META_APP_ID }}"
+          export META_APP_SECRET="{{ .Data.data.META_APP_SECRET }}"
+          export MICROSOFT_CLIENT_ID="{{ .Data.data.MICROSOFT_CLIENT_ID }}"
+          export MICROSOFT_CLIENT_SECRET="{{ .Data.data.MICROSOFT_CLIENT_SECRET }}"
+          export MICROSOFT_TENANT_ID="{{ .Data.data.MICROSOFT_TENANT_ID }}"
+          export NEXTAUTH_SECRET="{{ .Data.data.NEXTAUTH_SECRET }}"
+          export REDIS_URL="{{ .Data.data.REDIS_URL }}"
+          export SMTP_FROM="{{ .Data.data.SMTP_FROM }}"
+          export SMTP_HOST="{{ .Data.data.SMTP_HOST }}"
+          export SMTP_PASS="{{ .Data.data.SMTP_PASS }}"
+          export SMTP_PORT="{{ .Data.data.SMTP_PORT }}"
+          export SMTP_USER="{{ .Data.data.SMTP_USER }}"
+          export GEMINI_API_KEY="{{ .Data.data.GEMINI_API_KEY }}"
+          export GEMINI_MODEL="{{ .Data.data.GEMINI_MODEL }}"
+          export GEMINI_API_KEY_1="{{ .Data.data.GEMINI_API_KEY_1 }}"
+          export GEMINI_API_KEY_2="{{ .Data.data.GEMINI_API_KEY_2 }}"
+          export GEMINI_API_KEY_3="{{ .Data.data.GEMINI_API_KEY_3 }}"
+          export OPENROUTER_API_KEY="{{ .Data.data.OPENROUTER_API_KEY }}"
+          export OPENROUTER_ATS_MODEL="{{ .Data.data.OPENROUTER_ATS_MODEL }}"
+          export OPENROUTER_APP_URL="{{ .Data.data.OPENROUTER_APP_URL }}"
+          export OPENROUTER_APP_TITLE="{{ .Data.data.OPENROUTER_APP_TITLE }}"
+          export GCS_CLIENT_EMAIL="{{ .Data.data.GCS_CLIENT_EMAIL }}"
+          export GCS_BUCKET="{{ .Data.data.GCS_BUCKET }}"
+          export GCS_PROJECT_ID="{{ .Data.data.GCS_PROJECT_ID }}"
+          export GCS_PRIVATE_KEY='{{ .Data.data.GCS_PRIVATE_KEY }}'
+          export JWT_SIGNING_KEY='{{ .Data.data.JWT_SIGNING_KEY }}'
+          export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
+          {{- end }}
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: support
+          image: ghcr.io/akhileshgandhi/quiksupport-runtime:sha-ef42cc3
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/apps/quiksupport
+              exec node server.js
+          ports:
+            - containerPort: 3010
+          # AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY come from
+          # quikit-secrets; AWS_REGION + AWS_S3_BUCKET come from
+          # quikit-config (non-secret).
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatsupport.quikit.ai"
+            - name: NEXT_PUBLIC_QUIKSUPPORT_URL
+              value: "https://uatsupport.quikit.ai"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3010
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3010
+            initialDelaySeconds: 15
+            periodSeconds: 10
