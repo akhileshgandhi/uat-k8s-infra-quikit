@@ -226,7 +226,7 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-  - name: uatasset-gateway
+  - name: asset-gateway
     namespace: quikit
   hostnames:
   - uatasset.quikit.ai
