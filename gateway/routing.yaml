@@ -237,4 +237,4 @@ spec:
         value: "/"
     backendRefs:
     - name: quikasset-service
-      port: 3010
+      port: 3012
