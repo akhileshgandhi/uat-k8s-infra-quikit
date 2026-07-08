@@ -46,12 +46,11 @@ spec:
           export JWT_SIGNING_KEY_PUBLIC='{{ .Data.data.JWT_SIGNING_KEY_PUBLIC }}'
           {{- end }}
     spec:
-      
       imagePullSecrets:
         - name: ghcr-secret
       containers:
         - name: admin
-          image: ghcr.io/akhileshgandhi/admin-runtime:sha-ef42cc3
+          image: ghcr.io/akhileshgandhi/admin-runtime:sha-47065db
           command:
             - /bin/sh
             - -c
