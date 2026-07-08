@@ -236,5 +236,5 @@ spec:
         type: PathPrefix
         value: "/"
     backendRefs:
-    - name: quikasset-service
+    - name: asset-service
       port: 3012
