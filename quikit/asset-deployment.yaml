@@ -67,9 +67,9 @@ spec:
                 name: quikit-config
           env:
             - name: NEXTAUTH_URL
-              value: "https://uatassets.quikit.ai"
+              value: "https://uatasset.quikit.ai"
             - name: NEXT_PUBLIC_QUIKASSET_URL
-              value: "https://uatassets.quikit.ai"
+              value: "https://uatasset.quikit.ai"
               # - name: QUIKIT_CLIENT_SECRET
               #   valueFrom:
               #     secretKeyRef:

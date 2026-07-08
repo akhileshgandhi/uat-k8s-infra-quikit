@@ -217,3 +217,24 @@ spec:
     backendRefs:
     - name: support-service
       port: 3010
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-asset
+  namespace: quikit
+spec:
+  parentRefs:
+  - name: uatasset-gateway
+    namespace: quikit
+  hostnames:
+  - uatasset.quikit.ai
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    backendRefs:
+    - name: quikasset-service
+      port: 3010
