@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: quikasset-service
   namespace: quikit
-  annotations:
-    cloud.google.com/backend-config: '{"default": "quikit-backend-config"}'
 spec:
   selector:
     app: quikasset
