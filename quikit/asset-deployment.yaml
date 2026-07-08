@@ -61,7 +61,7 @@ spec:
               cd /app/apps/quikasset
               exec node server.js
           ports:
-            - containerPort: 3006
+            - containerPort: 3012
           envFrom:
             - configMapRef:
                 name: quikit-config
