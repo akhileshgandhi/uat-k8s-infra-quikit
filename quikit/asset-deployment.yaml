@@ -50,7 +50,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikasset
-          image: ghcr.io/akhileshgandhi/quikasset-runtime:sha-47065db
+          image: ghcr.io/akhileshgandhi/quikasset-runtime:sha-392487d
           command:
             - /bin/sh
             - -c
