@@ -2,7 +2,7 @@ readme.md
 configmap/secret.yaml
 dex/config.yaml
 *.secret.yaml
-
+gn.sh
 steps-to-restore-dump
 # Unseal Key 1: NlwdqPM7zkX3Dj4ox4RzoQl3EZBdBPBn8qm0fuAvXON1
 # Unseal Key 2: lpKlMhaHaRY7vMemEOWOHzwC1zWh0EozyVhLEWTvGzMz
