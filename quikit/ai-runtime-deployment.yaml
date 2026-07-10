@@ -50,9 +50,9 @@ spec:
           ports:
             - containerPort: 8065
 
-          envFrom:
-            - configMapRef:
-                name: quikit-config
+          # envFrom:
+          #   - configMapRef:
+          #       name: quikit-config
 
           resources:
             requests:
