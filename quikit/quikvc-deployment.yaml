@@ -54,7 +54,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikvc
-          image: ghcr.io/akhileshgandhi/quikit-vc:9b4c274
+          image: ghcr.io/akhileshgandhi/quikit-vc:a0c60fa
 
           command:
             - /bin/sh
