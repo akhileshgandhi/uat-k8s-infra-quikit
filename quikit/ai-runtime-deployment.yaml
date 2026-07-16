@@ -29,7 +29,7 @@ spec:
 
       containers:
         - name: ai-runtime
-          image: ghcr.io/akhileshgandhi/ai-runtime:v2
+          image: ghcr.io/akhileshgandhi/ai-runtime:sha-b692ff6
           imagePullPolicy: IfNotPresent
 
           command:
