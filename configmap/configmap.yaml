@@ -13,6 +13,9 @@ data:
    NEXT_PUBLIC_SUPER_ADMIN_URL: "https://uatorgadmin.quikit.ai"
    NEXT_PUBLIC_QUIKCRM_URL: "https://uatcrm.quikit.ai"
    NEXT_PUBLIC_QUIKHRMS_URL: "https://uatpeople.quikit.ai"
+   NEXT_PUBLIC_QUIKCHAT_URL: "https://uatchat.quikit.ai"
+   NEXT_PUBLIC_QUIKSOCKETS_URL: "https://uatsockets.quikit.ai"
+   NEXT_PUBLIC_REALTIME_WS_URL: "ws://uatsockets.quikit.ai"
    # Server-side mirrors (no NEXT_PUBLIC_ prefix — read by route handlers
    # and lib code that doesn't run in the browser).
    QUIKIT_URL: "https://uatapps.quikit.ai"
@@ -23,7 +26,8 @@ data:
    QUIKINFRA_URL: "https://uatinfra.quikit.ai"
    QUIKSOCIAL_URL: "https://uatsocial.quikit.ai"
    QUIKHRMS_URL: "https://uatpeople.quikit.ai"
-
+   RUNTIME_BASE_URL: "https://uataiengine.quikit.ai"
+   REALTIME_ALLOWED_ORIGINS: "https://uatchat.quikit.ai"
    # OAuth issuer (sub-apps point their OIDC client at this).
    QUIKIT_ISSUER_URL: "https://uatapps.quikit.ai"
    # AWS region + bucket (non-secret; secrets go in the Secret).
