@@ -43,6 +43,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatchat.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "admin"
           resources:
             limits:
               cpu: "500m"

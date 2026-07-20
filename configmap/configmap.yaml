@@ -27,7 +27,7 @@ data:
    QUIKSOCIAL_URL: "https://uatsocial.quikit.ai"
    QUIKHRMS_URL: "https://uatpeople.quikit.ai"
    RUNTIME_BASE_URL: "https://uataiengine.quikit.ai"
-   REALTIME_ALLOWED_ORIGINS: "https://uatchat.quikit.ai"
+   REALTIME_ALLOWED_ORIGINS: "https://uatsockets.quikit.ai"
    # OAuth issuer (sub-apps point their OIDC client at this).
    QUIKIT_ISSUER_URL: "https://uatapps.quikit.ai"
    # AWS region + bucket (non-secret; secrets go in the Secret).
