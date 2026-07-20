@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-deployment
+  namespace: quikit
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chat
+  template:
+    metadata:
+      labels:
+        app: chat
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "global-role"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{- with secret "secret/data/quikit/auth-service" -}}
+          {{- range ,  := .Data.data }}
+          export {{  }}="{{  }}"
+          {{- end }}
+          {{- end }} 
+
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+      - name: chat
+        image: ghcr.io/akhileshgandhi/quikchat-runtime:sha-8baa41c
+
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -a
+          . /vault/secrets/config
+          set +a
+          cd /app/apps/quikchat
+          exec node server.js
+
+        ports:
+        - containerPort: 3011
+
+        envFrom:
+        - configMapRef:
+            name: quikit-config
+
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3011
+          initialDelaySeconds: 45
+          periodSeconds: 20
+
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3011
+          initialDelaySeconds: 15
+          periodSeconds: 10
