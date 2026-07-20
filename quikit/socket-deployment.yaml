@@ -47,6 +47,10 @@ spec:
         envFrom:
         - configMapRef:
             name: quikit-config
+        
+        env:
+          - name: PORT
+            value: "9100"
 
         resources:
           limits:
