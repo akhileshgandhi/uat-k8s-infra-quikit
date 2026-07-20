@@ -47,7 +47,7 @@ spec:
             - name: NEXTAUTH_URL
               value: "https://uatchat.quikit.ai"
             - name: QUIKIT_CLIENT_ID
-              value: "admin"
+              value: "quikchat"
           resources:
             limits:
               cpu: "500m"
