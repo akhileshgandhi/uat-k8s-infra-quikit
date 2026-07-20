@@ -38,8 +38,8 @@ spec:
           set -a
           . /vault/secrets/config
           set +a
-          cd /app/apps/realtime
-          exec node server.js
+          cd /apps/apps/realtime
+          exec node dist/index.js
 
         ports:
         - containerPort: 9100
