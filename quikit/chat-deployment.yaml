@@ -23,49 +23,42 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-      - name: chat
-        image: ghcr.io/akhileshgandhi/quikchat-runtime:sha-8baa41c
-
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -a
-          . /vault/secrets/config
-          set +a
-          cd /app/apps/quikchat
-          exec node server.js
-
-        ports:
-        - containerPort: 3011
-
-        envFrom:
-        - configMapRef:
-            name: quikit-config
-
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-          requests:
-            cpu: "200m"
-            memory: "256Mi"
-
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 3011
-          initialDelaySeconds: 45
-          periodSeconds: 20
-
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 3011
-          initialDelaySeconds: 15
-          periodSeconds: 10
+        - name: chat
+          image: ghcr.io/akhileshgandhi/quikchat-runtime:sha-469c46a
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/apps/quikchat
+              exec node server.js
+          ports:
+            - containerPort: 3011
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3011
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3011
+            initialDelaySeconds: 15
+            periodSeconds: 10
