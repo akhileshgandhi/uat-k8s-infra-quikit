@@ -60,7 +60,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quiktrack
-          image: ghcr.io/akhileshgandhi/quiktrack-runtime:sha-469c46a
+          image: ghcr.io/akhileshgandhi/quiktrack-runtime:sha-f52b340
           command:
             - /bin/sh
             - -c
