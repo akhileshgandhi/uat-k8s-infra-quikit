@@ -23,53 +23,45 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-      - name: socket
-        image: ghcr.io/akhileshgandhi/realtime-runtime:sha-8baa41c
-
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -a
-          . /vault/secrets/config
-          set +a
-          cd /app/services/realtime
-          exec node dist/index.js
-
-        ports:
-        - containerPort: 9100
-
-        envFrom:
-        - configMapRef:
-            name: quikit-config
-        
-        env:
-          - name: PORT
-            value: "9100"
-
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-          requests:
-            cpu: "200m"
-            memory: "256Mi"
-
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 9100
-          initialDelaySeconds: 45
-          periodSeconds: 20
-
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 9100
-          initialDelaySeconds: 15
-          periodSeconds: 10
+        - name: socket
+          image: ghcr.io/akhileshgandhi/realtime-runtime:sha-2eb67e3
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/services/realtime
+              exec node dist/index.js
+          ports:
+            - containerPort: 9100
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: PORT
+              value: "9100"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9100
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9100
+            initialDelaySeconds: 15
+            periodSeconds: 10
