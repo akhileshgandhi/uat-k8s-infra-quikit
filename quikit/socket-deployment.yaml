@@ -38,7 +38,7 @@ spec:
           set -a
           . /vault/secrets/config
           set +a
-          cd /app/apps/realtime
+          cd /app/services/realtime
           exec node dist/index.js
 
         ports:
