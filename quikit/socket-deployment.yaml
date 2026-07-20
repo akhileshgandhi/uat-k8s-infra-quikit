@@ -19,10 +19,10 @@ spec:
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
         vault.hashicorp.com/agent-inject-template-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
-          {{- range ,  := .Data.data }}
-          export {{  }}="{{  }}"
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
           {{- end }}
-          {{- end }} 
+          {{- end }}
 
     spec:
       imagePullSecrets:
