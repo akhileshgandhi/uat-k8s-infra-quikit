@@ -71,7 +71,7 @@ spec:
           # Per-pod value: this pod's own NEXTAUTH_URL (the launcher's host).
           env:
             - name: NEXTAUTH_URL
-              value: "https://uatapps.quikit.ai"
+              value: "https://uat.quikit.ai"
           resources:
             limits:
               cpu: "500m"
