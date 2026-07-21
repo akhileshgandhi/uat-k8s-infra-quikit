@@ -55,7 +55,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikconstruction
-          image: ghcr.io/akhileshgandhi/quikinfra-runtime:sha-14f87c1
+          image: ghcr.io/akhileshgandhi/quikinfra-runtime:sha-cda1f0e
           command:
             - /bin/sh
             - -c
@@ -76,9 +76,9 @@ spec:
             - name: NEXT_PUBLIC_AUTH_URL
               value: "https://uatauthn.quikit.ai"
             - name: QUIKIT_URL
-              value: "https://uat.quikit.ai"
+              value: "https://uatapps.quikit.ai"
             - name: NEXT_PUBLIC_LAUNCHER_URL
-              value: "https://uat.quikit.ai"
+              value: "https://uatapps.quikit.ai"
             - name: NEXT_PUBLIC_QUIKINFRA_URL
               value: "https://uatinfra.quikit.ai"
             - name: QUIKIT_CLIENT_ID
