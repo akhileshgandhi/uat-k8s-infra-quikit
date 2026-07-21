@@ -4,9 +4,9 @@ metadata:
   name: quikit-config
   namespace: quikit
 data:
-   NEXT_PUBLIC_LAUNCHER_URL: "https://uatapps.quikit.ai"
+   NEXT_PUBLIC_LAUNCHER_URL: "https://uat.quikit.ai"
    NEXT_PUBLIC_AUTH_URL: "https://uatauthn.quikit.ai"
-   NEXT_PUBLIC_QUIKIT_URL: "https://uatapps.quikit.ai"
+   NEXT_PUBLIC_QUIKIT_URL: "https://uat.quikit.ai"
    NEXT_PUBLIC_ADMIN_URL: "https://uatorgadmin.quikit.ai"
    NEXT_PUBLIC_QUIKSCALE_URL: "https://uatscale.quikit.ai"
    NEXT_PUBLIC_LOGIN_URL: "https://uatauthn.quikit.ai/login"

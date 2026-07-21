@@ -76,9 +76,9 @@ spec:
             - name: NEXT_PUBLIC_AUTH_URL
               value: "https://uatauthn.quikit.ai"
             - name: QUIKIT_URL
-              value: "https://uatapps.quikit.ai"
+              value: "https://uat.quikit.ai"
             - name: NEXT_PUBLIC_LAUNCHER_URL
-              value: "https://uatapps.quikit.ai"
+              value: "https://uat.quikit.ai"
             - name: NEXT_PUBLIC_QUIKINFRA_URL
               value: "https://uatinfra.quikit.ai"
             - name: QUIKIT_CLIENT_ID
