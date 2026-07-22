@@ -1,0 +1,56 @@
+# kubectl create secret generic quikcrm-cron-secret  -n quikit  --from-literal=cron-secret='aaja'
+
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quikcrm-daily-digest
+  namespace: quikit
+spec:
+  # 20:30 IST = 15:00 UTC
+  schedule: "0 15 * * *"
+
+  # Do not start a new job if the previous one is still running
+  concurrencyPolicy: Forbid
+
+  # If the CronJob misses its scheduled time by more than 5 minutes,
+  # Kubernetes will not start the missed job
+  startingDeadlineSeconds: 300
+
+  # Keep the last 3 successful jobs
+  successfulJobsHistoryLimit: 3
+
+  # Keep the last 3 failed jobs
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Maximum time the Job is allowed to run
+      activeDeadlineSeconds: 360
+
+      # Retry once if the Job fails
+      backoffLimit: 1
+
+      template:
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.8.0
+
+              args:
+                - "-sS"
+                - "--fail"
+                - "--max-time"
+                - "330"
+                - "-H"
+                - "Authorization: Bearer $(CRON_SECRET)"
+                - "https://uatcrm.quikit.ai/api/notifications/digest/daily"
+
+              env:
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: quikcrm-cron-secret
+                      key: cron-secret

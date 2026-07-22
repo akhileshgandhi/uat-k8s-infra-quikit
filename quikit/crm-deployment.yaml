@@ -78,6 +78,8 @@ spec:
               value: "https://uatcrm.quikit.ai"
             - name: NEXT_PUBLIC_QUIKCRM_URL
               value: "https://uatcrm.quikit.ai"
+            - name: CRON_SECRET
+              value: "aaja"
               # - name: JWT_SECRET
               #   value: "7ynQaE7hcVrogq9q7OdIQTnCaeg+uPLeqXELLAWQ7LE="
           resources:
