@@ -52,7 +52,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: admin
-          image: ghcr.io/akhileshgandhi/admin-runtime:sha-eb43bd3
+          image: ghcr.io/akhileshgandhi/admin-runtime:sha-58f14bb
           command:
             - /bin/sh
             - -c
