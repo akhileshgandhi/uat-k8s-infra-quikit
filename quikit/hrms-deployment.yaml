@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: hrms-deployment
   namespace: quikit
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   replicas: 2
   selector:

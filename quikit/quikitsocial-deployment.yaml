@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: quiksocial-deployment
   namespace: quikit
+  annotations:
+    argocd.argoproj.io/sync-wave: "8"
 spec:
   replicas: 0
   selector:
