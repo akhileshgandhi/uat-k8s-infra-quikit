@@ -28,7 +28,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: socket
-          image: ghcr.io/akhileshgandhi/realtime-runtime:sha-a14752c
+          image: ghcr.io/akhileshgandhi/realtime-runtime:sha-4dfc4f3
           command:
             - /bin/sh
             - -c
