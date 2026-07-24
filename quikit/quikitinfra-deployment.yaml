@@ -4,7 +4,7 @@ metadata:
   name: quikconstruction-deployment
   namespace: quikit
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   replicas: 2
   selector:
