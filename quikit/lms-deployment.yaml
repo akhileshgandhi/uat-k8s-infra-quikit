@@ -45,6 +45,8 @@ spec:
               value: "https://uatlms.quikit.ai"
             - name: QUIKIT_CLIENT_ID
               value: "quiklms"
+            - name: NEXT_PUBLIC_LMS_URL
+              value: "https://uatlms.quikit.ai"
           resources:
             limits:
               cpu: "500m"
