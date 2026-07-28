@@ -19,61 +19,48 @@ spec:
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-        vault.hashicorp.com/agent-inject-template-config: |
-          {{- with secret "secret/data/quikit/auth-service" -}}
-          {{- range ,  := .Data.data }}
-          export {{  }}="{{  }}"
-          {{- end }}
-          {{- end }} 
-
+        vault.hashicorp.com/agent-inject-template-config: "{{- with secret \"secret/data/quikit/auth-service\" -}}\n{{- range ,  := .Data.data }}\nexport {{  }}=\"{{  }}\"\n{{- end }}\n{{- end }} \n"
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-      - name: lms
-        image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-7c4a5d2
-
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -a
-          . /vault/secrets/config
-          set +a
-          cd /app/apps/quiklms
-          exec node server.js
-
-        ports:
-        - containerPort: 3014
-
-        envFrom:
-        - configMapRef:
-            name: quikit-config
-        
-        env:
-          - name: NEXTAUTH_URL
-            value: "https://uatlms.quikit.ai"
-          - name: QUIKIT_CLIENT_ID
-            value: "quiklms"
-
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-          requests:
-            cpu: "100m"
-            memory: "256Mi"
-
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 3014
-          initialDelaySeconds: 45
-          periodSeconds: 20
-
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 3014
-          initialDelaySeconds: 15
-          periodSeconds: 10
+        - name: lms
+          image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-96314d8
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/apps/quiklms
+              exec node server.js
+          ports:
+            - containerPort: 3014
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatlms.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quiklms"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3014
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3014
+            initialDelaySeconds: 15
+            periodSeconds: 10
