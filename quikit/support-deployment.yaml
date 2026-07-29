@@ -65,7 +65,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: support
-          image: ghcr.io/akhileshgandhi/quiksupport-runtime:sha-24e9491
+          image: ghcr.io/akhileshgandhi/quiksupport-runtime:sha-961f346
           command:
             - /bin/sh
             - -c
