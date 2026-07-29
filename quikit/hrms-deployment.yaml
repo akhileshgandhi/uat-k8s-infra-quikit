@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: hrms
-          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-d55a121
+          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-831f662
           command:
             - /bin/sh
             - -c

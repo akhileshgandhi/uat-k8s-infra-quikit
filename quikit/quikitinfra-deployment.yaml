@@ -57,7 +57,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikconstruction
-          image: ghcr.io/akhileshgandhi/quikinfra-runtime:sha-d55a121
+          image: ghcr.io/akhileshgandhi/quikinfra-runtime:sha-831f662
           command:
             - /bin/sh
             - -c
