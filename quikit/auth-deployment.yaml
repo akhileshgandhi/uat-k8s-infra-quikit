@@ -52,7 +52,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: auth
-          image: ghcr.io/akhileshgandhi/auth-runtime:sha-961f346
+          image: ghcr.io/akhileshgandhi/auth-runtime:sha-cd94aba
           command:
             - /bin/sh
             - -c
