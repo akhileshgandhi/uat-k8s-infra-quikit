@@ -21,6 +21,7 @@ data:
    NEXT_PUBLIC_LAUNCHER_LOGOUT_URL: "https://uat.quikit.ai"
    NEXT_PUBLIC_LANDING_URL: "https://uat.quikit.ai"
    MAILBOX_OAUTH_REDIRECT_BASE: "https://uatcrm.quikit.ai"
+   NEXT_PUBLIC_WEBSITE_URL: "http://uat.quikit.ai"
 
 
    # Server-side mirrors (no NEXT_PUBLIC_ prefix — read by route handlers
