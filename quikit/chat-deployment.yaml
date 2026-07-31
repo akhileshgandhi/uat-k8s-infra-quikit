@@ -5,51 +5,86 @@ metadata:
   namespace: quikit
   annotations:
     argocd.argoproj.io/sync-wave: "1"
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: chat
+
   template:
     metadata:
       labels:
         app: chat
+
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-        vault.hashicorp.com/agent-inject-template-config: |
+
+        # =====================================================
+        # Auth Service Vault Secrets
+        # =====================================================
+        vault.hashicorp.com/agent-inject-secret-auth-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-auth-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
           {{- range $k, $v := .Data.data }}
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
+
+        # =====================================================
+        # Chat Vault Secrets
+        # =====================================================
+        vault.hashicorp.com/agent-inject-secret-chat-config: "secret/data/quikit/chat"
+        vault.hashicorp.com/agent-inject-template-chat-config: |
+          {{- with secret "secret/data/quikit/chat" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
+
     spec:
       imagePullSecrets:
         - name: ghcr-secret
+
       containers:
         - name: chat
           image: ghcr.io/akhileshgandhi/quikchat-runtime:sha-4e87cf9
+
           command:
             - /bin/sh
             - -c
             - |
               set -a
-              . /vault/secrets/config
+
+              # Load auth-service secrets
+              . /vault/secrets/auth-config
+
+              # Load chat secrets
+              . /vault/secrets/chat-config
+
               set +a
+
               cd /app/apps/quikchat
+
               exec node server.js
+
           ports:
             - containerPort: 3011
+
           envFrom:
             - configMapRef:
                 name: quikit-config
+
           env:
             - name: NEXTAUTH_URL
               value: "https://uatchat.quikit.ai"
+
             - name: QUIKIT_CLIENT_ID
               value: "quikchat"
+
           resources:
             limits:
               cpu: "500m"
@@ -57,12 +92,14 @@ spec:
             requests:
               cpu: "100m"
               memory: "256Mi"
+
           livenessProbe:
             httpGet:
               path: /api/health
               port: 3011
             initialDelaySeconds: 45
             periodSeconds: 20
+
           readinessProbe:
             httpGet:
               path: /api/health
