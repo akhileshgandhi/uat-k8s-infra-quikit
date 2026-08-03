@@ -1,0 +1,10 @@
+apiVersion: gateway.nginx.org/v1alpha1
+kind: SnippetsFilter
+metadata:
+  name: chat-large-url
+  namespace: quikit
+spec:
+  snippets:
+    - context: http.server
+      value: |
+        large_client_header_buffers 4 16k;
