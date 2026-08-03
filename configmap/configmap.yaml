@@ -17,7 +17,6 @@ data:
    NEXT_PUBLIC_QUIKHRMS_URL: "https://uatpeople.quikit.ai"
    NEXT_PUBLIC_QUIKCHAT_URL: "https://uatchat.quikit.ai"
    NEXT_PUBLIC_QUIKSOCKETS_URL: "https://uatsockets.quikit.ai"
-   NEXT_PUBLIC_REALTIME_WS_URL: "ws://uatsockets.quikit.ai"
    NEXT_PUBLIC_LAUNCHER_LOGOUT_URL: "https://uat.quikit.ai"
    NEXT_PUBLIC_LANDING_URL: "https://uat.quikit.ai"
    MAILBOX_OAUTH_REDIRECT_BASE: "https://uatcrm.quikit.ai"
