@@ -5,14 +5,11 @@ metadata:
   namespace: quikit
   annotations:
     argocd.argoproj.io/sync-wave: "4"
-
 spec:
   replicas: 2
-
   selector:
     matchLabels:
       app: insights
-
   template:
     metadata:
       labels:
@@ -21,7 +18,6 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-
         # This creates /vault/secrets/auth-config
         vault.hashicorp.com/agent-inject-secret-auth-config: "secret/data/quikit/auth-service"
         vault.hashicorp.com/agent-inject-template-auth-config: |
@@ -30,7 +26,6 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
         # This creates /vault/secrets/insights-config
         vault.hashicorp.com/agent-inject-secret-insights-config: "secret/data/quikit/insights"
         vault.hashicorp.com/agent-inject-template-insights-config: |
@@ -39,15 +34,12 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
-
       containers:
         - name: insights
-          image: ghcr.io/akhileshgandhi/quikinsight-runtime:sha-8e1519d
-
+          image: ghcr.io/akhileshgandhi/quikinsight-runtime:sha-bdc55e7
           command:
             - /bin/sh
             - -c
@@ -59,21 +51,16 @@ spec:
 
               cd /app/apps/quikinsight
               exec node server.js
-
           ports:
             - containerPort: 3015
-
           envFrom:
             - configMapRef:
                 name: quikit-config
-
           env:
             - name: NEXTAUTH_URL
               value: "https://uatinsights.quikit.ai"
-
             - name: QUIKIT_CLIENT_ID
               value: "insights"
-
           resources:
             limits:
               cpu: "500m"
@@ -81,14 +68,12 @@ spec:
             requests:
               cpu: "100m"
               memory: "256Mi"
-
           livenessProbe:
             httpGet:
               path: /api/health
               port: 3015
             initialDelaySeconds: 45
             periodSeconds: 20
-
           readinessProbe:
             httpGet:
               path: /api/health
