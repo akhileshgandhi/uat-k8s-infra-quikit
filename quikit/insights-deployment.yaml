@@ -57,7 +57,7 @@ spec:
               . /vault/secrets/insights-config
               set +a
 
-              cd /app/apps/insight
+              cd /app/apps/quikinsight
               exec node server.js
 
           ports:
