@@ -19,71 +19,52 @@ spec:
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-        vault.hashicorp.com/agent-inject-template-config: |
-          {{- with secret "secret/data/quikit/auth-service" -}}
-          {{- range $k, $v := .Data.data }}
-          export {{ $k }}="{{ $v }}"
-          {{- end }}
-          {{- end }} 
-
+        vault.hashicorp.com/agent-inject-template-config: "{{- with secret \"secret/data/quikit/auth-service\" -}}\n{{- range $k, $v := .Data.data }}\nexport {{ $k }}=\"{{ $v }}\"\n{{- end }}\n{{- end }} \n"
         vault.hashicorp.com/agent-inject-secret-chat-config: "secret/data/quikit/insights"
-        vault.hashicorp.com/agent-inject-template-chat-config: |
-          {{- with secret "secret/data/quikit/insights" -}}
-          {{- range $k, $v := .Data.data }}
-          export {{ $k }}="{{ $v }}"
-          {{- end }}
-          {{- end }}  
+        vault.hashicorp.com/agent-inject-template-chat-config: "{{- with secret \"secret/data/quikit/insights\" -}}\n{{- range $k, $v := .Data.data }}\nexport {{ $k }}=\"{{ $v }}\"\n{{- end }}\n{{- end }}  \n"
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-      - name: insights
-        image: ghcr.io/akhileshgandhi/quikinsight-runtime:sha-44096b5
+        - name: insights
+          image: ghcr.io/akhileshgandhi/quikinsight-runtime:sha-8e1519d
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
 
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -a
-          
-          . /vault/secrets/auth-config
-          . /vault/secrets/insights-config
-          set +a
-          cd /app/apps/insights
-          exec node server.js
-
-        ports:
-        - containerPort: 3015
-
-        envFrom:
-        - configMapRef:
-            name: quikit-config
-        
-        env:
-          - name: NEXTAUTH_URL
-            value: "https://uatinsights.quikit.ai"
-          
-          - name: QUIKIT_CLIENT_ID
-            value: "insights"
-
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-          requests:
-            cpu: "100m"
-            memory: "256Mi"
-
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 3015
-          initialDelaySeconds: 45
-          periodSeconds: 20
-
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 3015
-          initialDelaySeconds: 15
-          periodSeconds: 10
+              . /vault/secrets/auth-config
+              . /vault/secrets/insights-config
+              set +a
+              cd /app/apps/insights
+              exec node server.js
+          ports:
+            - containerPort: 3015
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatinsights.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "insights"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3015
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3015
+            initialDelaySeconds: 15
+            periodSeconds: 10
