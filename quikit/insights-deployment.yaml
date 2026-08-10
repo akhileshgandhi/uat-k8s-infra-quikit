@@ -45,6 +45,7 @@ spec:
         - -c
         - |
           set -a
+          
           . /vault/secrets/auth-config
           . /vault/secrets/insights-config
           set +a
