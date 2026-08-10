@@ -25,6 +25,14 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }} 
+
+        vault.hashicorp.com/agent-inject-secret-chat-config: "secret/data/quikit/insights"
+        vault.hashicorp.com/agent-inject-template-chat-config: |
+          {{- with secret "secret/data/quikit/insights" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}  
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,7 +45,8 @@ spec:
         - -c
         - |
           set -a
-          . /vault/secrets/config
+          . /vault/secrets/auth-config
+          . /vault/secrets/insights-config
           set +a
           cd /app/apps/insights
           exec node server.js
@@ -52,6 +61,7 @@ spec:
         env:
           - name: NEXTAUTH_URL
             value: "https://uatinsights.quikit.ai"
+          
           - name: QUIKIT_CLIENT_ID
             value: "insights"
 
