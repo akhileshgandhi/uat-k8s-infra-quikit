@@ -8,6 +8,6 @@ spec:
     app: crmexpress
   ports:
   - protocol: TCP
-    port: 3076
-    targetPort: 3076
+    port: 3017
+    targetPort: 3017
   type: NodePort

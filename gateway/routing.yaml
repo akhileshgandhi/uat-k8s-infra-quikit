@@ -362,4 +362,4 @@ spec:
             value: "/"
       backendRefs:
         - name: crmexpress-service
-          port: 3076
+          port: 3017
