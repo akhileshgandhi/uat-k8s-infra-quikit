@@ -40,7 +40,7 @@ spec:
           set -a
           . /vault/secrets/config
           set +a
-          cd /app/apps/quikcredflow
+          cd /app/apps/quikcrmexpress
           exec node server.js
 
         ports:
