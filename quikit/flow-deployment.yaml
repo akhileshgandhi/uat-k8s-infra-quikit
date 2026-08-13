@@ -18,13 +18,21 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
         vault.hashicorp.com/agent-init-first: "true"
-        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
-        vault.hashicorp.com/agent-inject-template-config: |
+        vault.hashicorp.com/agent-inject-secret-auth-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-auth-config: |
           {{- with secret "secret/data/quikit/auth-service" -}}
-          {{- range ,  := .Data.data }}
-          export {{  }}="{{  }}"
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
           {{- end }}
-          {{- end }} 
+          {{- end }}
+        
+        vault.hashicorp.com/agent-inject-secret-flow-config: "secret/data/quikit/flow"
+        vault.hashicorp.com/agent-inject-template-flow-config: |
+          {{- with secret "secret/data/quikit/flow" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
 
     spec:
       imagePullSecrets:
@@ -38,8 +46,9 @@ spec:
         - -c
         - |
           set -a
-          . /vault/secrets/config
-          set +a
+              . /vault/secrets/auth-config
+              . /vault/secrets/flow-config
+              set +a
           cd /app/apps/quikflow
           exec node server.js
 

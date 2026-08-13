@@ -31,6 +31,7 @@ data:
    QUIKINSIGHT_URL: "https://uatinsights.quikit.ai"
 
    QUIKLMS_URL: "https://uatlms.quikit.ai"
+   QUIKFLOW_URL: "https://uatflow.quikit.ai"
    QUIKIT_URL: "https://uatapps.quikit.ai"
    ADMIN_URL: "https://uatorgadmin.quikit.ai"
    QUIKSCALE_URL: "https://uatscale.quikit.ai"
