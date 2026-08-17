@@ -320,7 +320,7 @@ spec:
             value: "/"
       backendRefs:
         - name: lms-service
-          port: 3014
+          port: 3016
 
 ---
 apiVersion: gateway.networking.k8s.io/v1

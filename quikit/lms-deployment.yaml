@@ -41,7 +41,7 @@ spec:
               cd /app/apps/quiklms
               exec node server.js
           ports:
-            - containerPort: 3014
+            - containerPort: 3016
           envFrom:
             - configMapRef:
                 name: quikit-config
@@ -62,12 +62,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: 3014
+              port: 3016
             initialDelaySeconds: 45
             periodSeconds: 20
           readinessProbe:
             httpGet:
               path: /api/health
-              port: 3014
+              port: 3016
             initialDelaySeconds: 15
             periodSeconds: 10

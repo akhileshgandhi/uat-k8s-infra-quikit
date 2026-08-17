@@ -8,6 +8,6 @@ spec:
     app: lms
   ports:
   - protocol: TCP
-    port: 3014
-    targetPort: 3014
+    port: 3016
+    targetPort: 3016
   type: NodePort
