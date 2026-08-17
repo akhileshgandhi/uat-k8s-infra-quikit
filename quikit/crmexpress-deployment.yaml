@@ -25,7 +25,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: crmexpress
-          image: ghcr.io/akhileshgandhi/quikcrmexpress-runtime:sha-bbf2612
+          image: ghcr.io/akhileshgandhi/quikcrmexpress-runtime:sha-4657aef
           command:
             - /bin/sh
             - -c
