@@ -60,7 +60,7 @@ spec:
             - name: NEXTAUTH_URL
               value: "https://uatinsights.quikit.ai"
             - name: QUIKIT_CLIENT_ID
-              value: "insights"
+              value: "quikinsight"
           resources:
             limits:
               cpu: "500m"
