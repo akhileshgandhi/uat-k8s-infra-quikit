@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: crm
-          image: ghcr.io/akhileshgandhi/quikcrm-runtime:sha-eb9523b
+          image: ghcr.io/akhileshgandhi/quikcrm-runtime:sha-c146ad2
           command:
             - /bin/sh
             - -c
