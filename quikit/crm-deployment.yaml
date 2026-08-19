@@ -25,6 +25,14 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
+
+        vault.hashicorp.com/agent-inject-secret-crm: "secret/data/quikit/crm"
+        vault.hashicorp.com/agent-inject-template-crm: |
+          {{- with secret "secret/data/quikit/crm" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,6 +45,7 @@ spec:
             - |
               set -a
               . /vault/secrets/config
+              . /vault/secrets/crm
               set +a
               cd /app/apps/quikcrm
               exec node server.js
