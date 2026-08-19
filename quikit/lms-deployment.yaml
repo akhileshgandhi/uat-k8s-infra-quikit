@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: lms
-          image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-eb9523b
+          image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-5ca0a59
           command:
             - /bin/sh
             - -c

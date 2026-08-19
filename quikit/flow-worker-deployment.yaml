@@ -37,7 +37,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: flow-worker
-          image: ghcr.io/akhileshgandhi/quikflow-worker-runtime:sha-eb9523b
+          image: ghcr.io/akhileshgandhi/quikflow-worker-runtime:sha-5ca0a59
           command:
             - /bin/sh
             - -c

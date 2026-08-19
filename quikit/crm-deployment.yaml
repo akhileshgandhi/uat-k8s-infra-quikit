@@ -25,7 +25,6 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
         vault.hashicorp.com/agent-inject-secret-crm: "secret/data/quikit/crm"
         vault.hashicorp.com/agent-inject-template-crm: |
           {{- with secret "secret/data/quikit/crm" -}}
@@ -38,7 +37,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: crm
-          image: ghcr.io/akhileshgandhi/quikcrm-runtime:sha-c146ad2
+          image: ghcr.io/akhileshgandhi/quikcrm-runtime:sha-5ca0a59
           command:
             - /bin/sh
             - -c
