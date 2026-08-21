@@ -5,14 +5,11 @@ metadata:
   namespace: quikit
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-
 spec:
   replicas: 2
-
   selector:
     matchLabels:
       app: lms
-
   template:
     metadata:
       labels:
@@ -28,15 +25,12 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
-
       containers:
         - name: lms
-          image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-7590c83
-
+          image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-d2afcee
           command:
             - /bin/sh
             - -c
@@ -46,24 +40,18 @@ spec:
               set +a
               cd /app/apps/quiklms
               exec node server.js
-
           ports:
             - containerPort: 3016
-
           envFrom:
             - configMapRef:
                 name: quikit-config
-
           env:
             - name: NEXTAUTH_URL
               value: "https://uatlms.quikit.ai"
-
             - name: QUIKIT_CLIENT_ID
               value: "quiklms"
-
             - name: NEXT_PUBLIC_LMS_URL
               value: "https://uatlms.quikit.ai"
-
           resources:
             limits:
               cpu: "500m"
@@ -71,14 +59,12 @@ spec:
             requests:
               cpu: "100m"
               memory: "256Mi"
-
           livenessProbe:
             httpGet:
               path: /api/health
               port: 3016
             initialDelaySeconds: 45
             periodSeconds: 20
-
           readinessProbe:
             httpGet:
               path: /api/health
