@@ -29,7 +29,6 @@ spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-<<<<<<< Updated upstream
         - name: lms
           image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-7590c83
           command:
@@ -72,7 +71,6 @@ spec:
               port: 3016
             initialDelaySeconds: 15
             periodSeconds: 10
-=======
       - name: lms
         image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-7c4a5d2
 
@@ -122,4 +120,3 @@ spec:
             port: 3014
           initialDelaySeconds: 15
           periodSeconds: 10
->>>>>>> Stashed changes
