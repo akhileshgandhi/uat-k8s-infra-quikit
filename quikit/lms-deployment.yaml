@@ -29,6 +29,7 @@ spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
+<<<<<<< Updated upstream
         - name: lms
           image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-7590c83
           command:
@@ -71,3 +72,54 @@ spec:
               port: 3016
             initialDelaySeconds: 15
             periodSeconds: 10
+=======
+      - name: lms
+        image: ghcr.io/akhileshgandhi/quiklms-runtime:sha-7c4a5d2
+
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -a
+          . /vault/secrets/config
+          set +a
+          cd /app/apps/quiklms
+          exec node server.js
+
+        ports:
+        - containerPort: 3014
+
+        envFrom:
+        - configMapRef:
+            name: quikit-config
+        
+        env:
+          - name: NEXTAUTH_URL
+            value: "https://uatlms.quikit.ai"
+          - name: NEXT_PUBLIC_QUIKLMS_URL
+              value: "https://uatlms.quikit.ai"
+          - name: QUIKIT_CLIENT_ID
+            value: "quiklms"
+
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3014
+          initialDelaySeconds: 45
+          periodSeconds: 20
+
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3014
+          initialDelaySeconds: 15
+          periodSeconds: 10
+>>>>>>> Stashed changes
