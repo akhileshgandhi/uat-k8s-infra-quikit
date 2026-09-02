@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: hrms
-          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-8c29bfd
+          image: ghcr.io/akhileshgandhi/quikhrms-runtime:sha-f915500
           command:
             - /bin/sh
             - -c
@@ -48,7 +48,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: quikit-config
-                
           env:
             - name: NEXTAUTH_URL
               value: "https://uatpeople.quikit.ai"
