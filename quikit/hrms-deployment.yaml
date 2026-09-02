@@ -48,11 +48,14 @@ spec:
           envFrom:
             - configMapRef:
                 name: quikit-config
+                
           env:
             - name: NEXTAUTH_URL
               value: "https://uatpeople.quikit.ai"
             - name: NEXT_PUBLIC_QUIKHRMS_URL
               value: "https://uatpeople.quikit.ai"
+            - name: CRON_SECRET
+              value: "baja"
           resources:
             limits:
               cpu: "500m"

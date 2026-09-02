@@ -1,0 +1,95 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hrms-recruit-daily-report
+  namespace: quikit
+  labels:
+    app: hrms
+    component: recruit-daily-report
+
+spec:
+  # Run every day at 8:00 PM IST
+  schedule: "0 20 * * *"
+  timeZone: "Asia/Kolkata"
+
+  # Never allow two report runs at the same time
+  concurrencyPolicy: Forbid
+
+  # If Kubernetes misses the scheduled time, only run within 15 minutes
+  startingDeadlineSeconds: 900
+
+  # Keep the last few Jobs for troubleshooting
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Retry the Job once if it fails
+      backoffLimit: 1
+
+      # Stop the Job after 6 minutes
+      activeDeadlineSeconds: 360
+
+      template:
+        metadata:
+          labels:
+            app: hrms
+            component: recruit-daily-report
+
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              env:
+                # IMPORTANT:
+                # Use the SAME CRON_SECRET configured in the HRMS application.
+                # Do not commit the real secret to Git if this file is stored
+                # in a GitOps repository.
+                - name: CRON_SECRET
+                  value: "baja"
+
+                # UAT HRMS recruitment report endpoint
+                - name: TARGET_URL
+                  value: "https://uatpeople.quikit.ai/api/v1/hrms/cron/recruit-daily-report"
+
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+
+                  echo "Starting HRMS recruitment daily report..."
+
+                  curl --fail-with-body \
+                       --silent \
+                       --show-error \
+                       --max-time 300 \
+                       --retry 2 \
+                       --retry-delay 30 \
+                       --retry-connrefused \
+                       -H "Authorization: Bearer ${CRON_SECRET}" \
+                       "${TARGET_URL}"
+
+                  echo
+                  echo "HRMS recruitment report completed successfully."
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 100
+                runAsGroup: 101
+                capabilities:
+                  drop:
+                    - ALL
