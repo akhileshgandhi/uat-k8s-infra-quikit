@@ -1,0 +1,14 @@
+1. kubectl cp .\quikit-full-30-6.dump db/pg18-cluster-1:/controller/quikit-full-30-6.dump
+2. kubectl exec -it -n db pg18-cluster-1 -- ls -lh /controller/quikit-full-30-6.dump
+3. kubectl exec -it -n db pg18-cluster-1 -- pg_restore -U postgres --clean --if-exists -d quikit /controller/quikit-full-30-6.dump
+
+.sql
+1. kubectl cp .\2026-06-30_quarter_weekcount.sql db/pg18-cluster-1:/controller/2026-06-30_quarter_weekcount.sql
+2. kubectl exec -it -n db pg18-cluster-1 -- sh -c "psql -U postgres -d quikit -f /controller/2026-06-30_quarter_weekcount.sql"
+
+ kubectl exec -n db pg18-cluster-1 -c postgres --   pg_dump -U postgres -d quikit -n app_quikhrms -Fc > ./quikhrms.dump
+
+
+
+
+
