@@ -1,12 +1,12 @@
 apiVersion: gateway.nginx.org/v1alpha1
 kind: ClientSettingsPolicy
 metadata:
-  name: chat-upload-limit
+  name: prod-gateway-client-settings
   namespace: quikit
 spec:
   targetRef:
     group: gateway.networking.k8s.io
-    kind: HTTPRoute
-    name: app-routing-chat
+    kind: Gateway
+    name: prod-gateway
   body:
-    maxSize: 30m
+    maxSize: "100m"
