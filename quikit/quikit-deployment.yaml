@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikit
-          image: ghcr.io/akhileshgandhi/quikit-runtime:sha-c4b7f3a
+          image: ghcr.io/akhileshgandhi/quikit-runtime:sha-14ee5d8
           command:
             - /bin/sh
             - -c
