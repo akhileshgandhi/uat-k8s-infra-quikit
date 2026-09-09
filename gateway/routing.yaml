@@ -14,9 +14,16 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: admin-service
       port: 3002
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -34,9 +41,16 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: auth-service
       port: 3001
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -54,9 +68,16 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: quikit-service
       port: 3000
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -74,15 +95,16 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
-    # filters:
-    # - type: ExtensionRef
-    #   extensionRef:
-    #     group: gateway.nginx.org
-    #     kind: SnippetsFilter
-    #     name: gateway-timeouts
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: quikscale-service
       port: 3003
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -100,9 +122,16 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: quiktrack-service
       port: 3004
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -120,26 +149,36 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: quikconstruction-service
       port: 3006
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: dex-route
   namespace: quikit
-
 spec:
   parentRefs:
   - name: prod-gateway
     namespace: quikit
-
   hostnames:
   - k8sauth.moreyeahs.in
-
   rules:
-  - backendRefs:
+  - filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
     - name: dex
       port: 5554
 
@@ -160,6 +199,12 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: crm-service
       port: 3008
@@ -172,16 +217,21 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
-
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatargocd.moreyeahs.in
-
+  - uatargocd.moreyeahs.in
   rules:
-    - backendRefs:
-        - name: argocd-server
-          port: 80
+  - filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: argocd-server
+      port: 80
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -199,6 +249,12 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: hrms-service
       port: 3009
@@ -220,6 +276,12 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: support-service
       port: 3010
@@ -241,9 +303,16 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
     backendRefs:
     - name: asset-service
       port: 3012
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -252,18 +321,24 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uataiengine.quikit.ai
+  - uataiengine.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: ai-runtime-service
-          port: 8065
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: ai-runtime-service
+      port: 8065
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -273,18 +348,24 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatchat.quikit.ai
+  - uatchat.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: chat-service
-          port: 3011
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: chat-service
+      port: 3011
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -294,18 +375,24 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatsockets.quikit.ai
+  - uatsockets.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: socket-service
-          port: 9100
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: socket-service
+      port: 9100
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -315,18 +402,24 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatlms.quikit.ai
+  - uatlms.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: lms-service
-          port: 3016
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: lms-service
+      port: 3016
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -336,18 +429,24 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatinsights.quikit.ai
+  - uatinsights.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: insights-service
-          port: 3015
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: insights-service
+      port: 3015
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -357,18 +456,25 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatcrmexpress.quikit.ai
+  - uatcrmexpress.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: crmexpress-service
-          port: 3017
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: crmexpress-service
+      port: 3017
+
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -377,15 +483,21 @@ metadata:
   namespace: quikit
 spec:
   parentRefs:
-    - name: prod-gateway
-      namespace: quikit
+  - name: prod-gateway
+    namespace: quikit
   hostnames:
-    - uatflow.quikit.ai
+  - uatflow.quikit.ai
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: "/"
-      backendRefs:
-        - name: flow-service
-          port: 3014
+  - matches:
+    - path:
+        type: PathPrefix
+        value: "/"
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.nginx.org
+        kind: SnippetsFilter
+        name: gateway-timeouts
+    backendRefs:
+    - name: flow-service
+      port: 3014
