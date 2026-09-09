@@ -15,8 +15,8 @@ spec:
   # Never allow two report runs at the same time
   concurrencyPolicy: Forbid
 
-  # If Kubernetes misses the scheduled time, only run within 15 minutes
-  startingDeadlineSeconds: 900
+  # If Kubernetes misses the scheduled time, only run within 2 minutes
+  startingDeadlineSeconds: 120
 
   # Keep the last few Jobs for troubleshooting
   successfulJobsHistoryLimit: 3
@@ -27,8 +27,8 @@ spec:
       # Retry the Job once if it fails
       backoffLimit: 1
 
-      # Stop the Job after 6 minutes
-      activeDeadlineSeconds: 360
+      # Stop the Job after 2 minutes
+      activeDeadlineSeconds: 120
 
       template:
         metadata:
@@ -44,12 +44,11 @@ spec:
               image: curlimages/curl:8.10.1
 
               env:
-                # IMPORTANT:
-                # Use the SAME CRON_SECRET configured in the HRMS application.
-                # Do not commit the real secret to Git if this file is stored
-                # in a GitOps repository.
                 - name: CRON_SECRET
-                  value: "baja"
+                  valueFrom:
+                    secretKeyRef:
+                      name: hrms-secrets
+                      key: CRON_SECRET
 
                 # UAT HRMS recruitment report endpoint
                 - name: TARGET_URL
@@ -66,9 +65,9 @@ spec:
                   curl --fail-with-body \
                        --silent \
                        --show-error \
-                       --max-time 300 \
+                       --max-time 60 \
                        --retry 2 \
-                       --retry-delay 30 \
+                       --retry-delay 10 \
                        --retry-connrefused \
                        -H "Authorization: Bearer ${CRON_SECRET}" \
                        "${TARGET_URL}"
