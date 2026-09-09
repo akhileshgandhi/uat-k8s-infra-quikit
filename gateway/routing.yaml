@@ -74,6 +74,12 @@ spec:
     - path:
         type: PathPrefix
         value: "/"
+    # filters:
+    # - type: ExtensionRef
+    #   extensionRef:
+    #     group: gateway.nginx.org
+    #     kind: SnippetsFilter
+    #     name: gateway-timeouts
     backendRefs:
     - name: quikscale-service
       port: 3003

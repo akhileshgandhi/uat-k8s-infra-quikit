@@ -1,0 +1,10 @@
+apiVersion: gateway.nginx.org/v1alpha1
+kind: SnippetsFilter
+metadata:
+  name: gateway-timeouts
+  namespace: quikit
+spec:
+  snippets:
+  - context: http.server.location
+    value: |
+      proxy_read_timeout 11m;

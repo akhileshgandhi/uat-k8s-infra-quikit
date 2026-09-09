@@ -1,0 +1,1 @@
+[{"op":"add","path":"/rules/-","value":{"apiGroups":["gateway.nginx.org"],"resources":["snippetsfilters"],"verbs":["get","list","watch"]}}]
