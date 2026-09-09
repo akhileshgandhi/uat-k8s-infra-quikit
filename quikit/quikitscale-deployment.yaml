@@ -25,6 +25,17 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
+
+                  # =====================================================
+        # Scale Vault Secrets
+        # =====================================================
+        vault.hashicorp.com/agent-inject-secret-scale-config: "secret/data/quikit/scale"
+        vault.hashicorp.com/agent-inject-template-scale-config: |
+          {{- with secret "secret/data/quikit/scale" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,6 +48,11 @@ spec:
             - |
               set -a
               . /vault/secrets/config
+
+
+              # Load scale secrets
+              . /vault/secrets/scale-config
+              
               set +a
               cd /app/apps/quikscale
               exec node server.js

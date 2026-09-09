@@ -80,4 +80,14 @@ kubectl create job --from=cronjob/hrms-recruit-daily-report hrms-recruit-test -n
 
 
 unseal command
+check the OpenBao seal/unseal status with bao status
+  cmd :kubectl exec -it openbao-0 -n openbao -- bao status
+
 kubectl exec -it -n openbao openbao-0 -- bao operator unseal
+
+
+
+Check the environment variables available to the running container
+kubectl exec -n <namespace> <pod-name> -- env
+
+
