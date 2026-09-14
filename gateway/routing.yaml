@@ -227,7 +227,7 @@ spec:
       extensionRef:
         group: gateway.nginx.org
         kind: SnippetsFilter
-        name: gateway-timeouts
+        name: gateway-timeouts-argo
     backendRefs:
     - name: argocd-server
       port: 80
