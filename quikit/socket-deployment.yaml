@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: socket
-          image: ghcr.io/akhileshgandhi/realtime-runtime:sha-5ae38db
+          image: ghcr.io/akhileshgandhi/realtime-runtime:sha-659d8ca
           command:
             - /bin/sh
             - -c
