@@ -41,7 +41,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikscale
-          image: ghcr.io/akhileshgandhi/quikscale-runtime:sha-659d8ca
+          image: ghcr.io/akhileshgandhi/quikscale-runtime:sha-689a5fa
           command:
             - /bin/sh
             - -c
