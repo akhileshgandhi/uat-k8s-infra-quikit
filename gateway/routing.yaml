@@ -501,3 +501,23 @@ spec:
     backendRefs:
     - name: flow-service
       port: 3014
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-quikfinance
+  namespace: quikit
+spec:
+  parentRefs:
+    - name: prod-gateway
+      namespace: quikit
+  hostnames:
+    - uatquikfinance.quikit.ai
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: quikfinance-service
+          port: 3013
