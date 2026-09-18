@@ -25,55 +25,47 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
-
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-      - name: quikfinance
-        image: ghcr.io/akhileshgandhi/quikfinance-runtime:sha-89731ca
-
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -a
-          . /vault/secrets/config
-          set +a
-          cd /app/apps/quikfinance
-          exec node server.js
-
-        ports:
-        - containerPort: 3013
-
-        envFrom:
-        - configMapRef:
-            name: quikit-config
-        
-        env:
-          - name: NEXTAUTH_URL
-            value: "https://uatfinance.quikit.ai"
-          - name: QUIKIT_CLIENT_ID
-            value: "quikfinance"
-
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-          requests:
-            cpu: "100m"
-            memory: "256Mi"
-
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 3013
-          initialDelaySeconds: 45
-          periodSeconds: 20
-
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 3013
-          initialDelaySeconds: 15
-          periodSeconds: 10
+        - name: quikfinance
+          image: ghcr.io/akhileshgandhi/quikfinance-runtime:sha-3327926
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/apps/quikfinance
+              exec node server.js
+          ports:
+            - containerPort: 3013
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatfinance.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quikfinance"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3013
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3013
+            initialDelaySeconds: 15
+            periodSeconds: 10
