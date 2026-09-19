@@ -39,7 +39,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: insights
-          image: ghcr.io/akhileshgandhi/quikinsight-runtime:sha-2f19585
+          image: ghcr.io/akhileshgandhi/quikinsight-runtime:sha-e828879
           command:
             - /bin/sh
             - -c
