@@ -41,7 +41,7 @@ spec:
               cd /app/apps/quiksign
               exec node server.js
           ports:
-            - containerPort: 3020
+            - containerPort: 3018
           envFrom:
             - configMapRef:
                 name: quikit-config
@@ -60,12 +60,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: 3020
+              port: 3018
             initialDelaySeconds: 45
             periodSeconds: 20
           readinessProbe:
             httpGet:
               path: /api/health
-              port: 3020
+              port: 3018
             initialDelaySeconds: 15
             periodSeconds: 10
