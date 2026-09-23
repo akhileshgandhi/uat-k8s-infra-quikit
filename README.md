@@ -47,7 +47,7 @@ open bao url - http://127.0.0.1:8200/
 https://uatargocd.moreyeahs.in/
 
 
-git stash
+git stash 
 git pull
 git stash pop
 

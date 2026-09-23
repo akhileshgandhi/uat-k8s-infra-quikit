@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sign-service
+  namespace: quikit
+spec:
+  selector:
+    app: sign
+  ports:
+  - protocol: TCP
+    port: 3018
+    targetPort: 3018
+  type: NodePort

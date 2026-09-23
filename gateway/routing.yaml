@@ -542,3 +542,26 @@ spec:
       backendRefs:
         - name: purchase-service
           port: 3020
+
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-sign
+  namespace: quikit
+spec:
+  parentRefs:
+    - name: prod-gateway
+      namespace: quikit
+  hostnames:
+    - uatsign.quikit.ai
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: sign-service
+          port: 3018
+
