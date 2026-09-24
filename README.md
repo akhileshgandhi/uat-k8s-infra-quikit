@@ -98,3 +98,10 @@ command to check the connections on db pgbouncer
 kubectl exec -it -n db pg18-pooler-5c788c484c-786wd -- \
   psql -h //controller/run -p 5432 -U pgbouncer -d pgbouncer -c "SHOW POOLS;"
 
+
+find all connections 
+kubectl get pods -A -o wide --no-headers | awk '{print $7, $1"/"$2}' | sort
+
+kubectl exec -n db pg18-pooler-5c788c484c-786wd -- \
+  psql -h //controller/run -p 5432 -U pgbouncer -d pgbouncer -A -F',' -t -c "SHOW CLIENTS;" \
+  | awk -F',' '{print $6}' | sort | uniq -c | sort -rn
