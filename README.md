@@ -91,3 +91,10 @@ Check the environment variables available to the running container
 kubectl exec -n <namespace> <pod-name> -- env
 
 
+command to increate the max connection 
+kubectl patch pooler pg18-pooler -n db --type merge -p '{"spec":{"pgbouncer":{"parameters":{"max_client_conn":"200","default_pool_size":"25","max_db_connections":"50","reserve_pool_size":"10","reserve_pool_timeout":"3"}}}}'
+
+command to check the connections on db pgbouncer
+kubectl exec -it -n db pg18-pooler-5c788c484c-786wd -- \
+  psql -h //controller/run -p 5432 -U pgbouncer -d pgbouncer -c "SHOW POOLS;"
+
