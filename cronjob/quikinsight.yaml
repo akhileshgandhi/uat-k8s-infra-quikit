@@ -1,0 +1,60 @@
+# kubectl create secret generic quikinsight-secrets -n quikit --from-literal=CRON_SECRET='<value>'
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quikinsight-insights
+  namespace: quikit
+spec:
+  # 06:00 IST = 00:30 UTC
+  schedule: "30 0 * * *"
+
+  # Do not start a new job if the previous one is still running
+  concurrencyPolicy: Forbid
+
+  # If the CronJob misses its scheduled time by more than 15 minutes,
+  # Kubernetes will not start the missed job
+  startingDeadlineSeconds: 900
+
+  # Keep the last 3 successful jobs
+  successfulJobsHistoryLimit: 3
+
+  # Keep the last 3 failed jobs
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Maximum time the Job is allowed to run
+      activeDeadlineSeconds: 900
+
+      # Retry once if the Job fails
+      backoffLimit: 1
+
+      template:
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              args:
+                - "-sS"
+                - "--fail-with-body"
+                - "--max-time"
+                - "600"
+                - "--retry"
+                - "2"
+                - "--retry-delay"
+                - "30"
+                - "--retry-connrefused"
+                - "-H"
+                - "Authorization: Bearer $(CRON_SECRET)"
+                - "http://quikinsight.quikit.svc.cluster.local:80/api/cron/insights"
+
+              env:
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: quikinsight-secrets
+                      key: CRON_SECRET
