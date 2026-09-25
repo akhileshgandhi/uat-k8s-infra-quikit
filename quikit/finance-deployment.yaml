@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: quikfinance
-          image: ghcr.io/akhileshgandhi/quikfinance-runtime:sha-7299634
+          image: ghcr.io/akhileshgandhi/quikfinance-runtime:sha-a065009
           command:
             - /bin/sh
             - -c
