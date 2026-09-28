@@ -50,7 +50,7 @@ spec:
                 - "--retry-connrefused"
                 - "-H"
                 - "Authorization: Bearer $(CRON_SECRET)"
-                - "https://uatinsight.quikit.ai/api/cron/insights"
+                - "https://uatinsights.quikit.ai/api/cron/insights"
 
               env:
                 - name: CRON_SECRET
