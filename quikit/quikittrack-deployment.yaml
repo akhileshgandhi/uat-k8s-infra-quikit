@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: quiktrack-deployment
+  name: projects-deployment
   namespace: quikit
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -9,11 +9,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: quiktrack
+      app: projects
   template:
     metadata:
       labels:
-        app: quiktrack
+        app: projects
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "global-role"
@@ -61,8 +61,8 @@ spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: quiktrack
-          image: ghcr.io/akhileshgandhi/quiktrack-runtime:sha-a065009
+        - name: projects
+          image: ghcr.io/akhileshgandhi/projects-runtime:sha-a065009
           command:
             - /bin/sh
             - -c
@@ -70,7 +70,7 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
-              cd /app/apps/quiktrack
+              cd /app/apps/projects
               exec node server.js
           ports:
             - containerPort: 3004
@@ -82,17 +82,17 @@ spec:
                 name: quikit-config
           env:
             - name: NEXTAUTH_URL
-              value: "https://uattrack.quikit.ai"
-            - name: NEXT_PUBLIC_QUIKTRACK_URL
-              value: "https://uattrack.quikit.ai"
+              value: "https://uatprojects.quikit.ai"
+            - name: NEXT_PUBLIC_PROJECTS_URL
+              value: "https://uatprojects.quikit.ai"
             # OAuth sub-app identity.
             - name: QUIKIT_CLIENT_ID
-              value: "quiktrack"
+              value: "quikprojects"
               # - name: QUIKIT_CLIENT_SECRET
               #   valueFrom:
               #     secretKeyRef:
               #       name: quikit-secrets
-              #       key: QUIKTRACK_CLIENT_SECRET
+              #       key: projects_CLIENT_SECRET
           resources:
             limits:
               cpu: "500m"

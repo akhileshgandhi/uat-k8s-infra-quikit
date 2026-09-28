@@ -129,7 +129,7 @@ spec:
         kind: SnippetsFilter
         name: gateway-timeouts
     backendRefs:
-    - name: quiktrack-service
+    - name: projects-service
       port: 3004
 
 ---
