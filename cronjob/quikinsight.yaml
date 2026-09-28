@@ -50,11 +50,8 @@ spec:
                 - "--retry-connrefused"
                 - "-H"
                 - "Authorization: Bearer $(CRON_SECRET)"
-                - "http://quikinsight.quikit.svc.cluster.local:80/api/cron/insights"
+                - "https://uatinsight.quikit.ai/api/cron/insights"
 
               env:
                 - name: CRON_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: quikinsight-secrets
-                      key: CRON_SECRET
+                  value: "quikit"

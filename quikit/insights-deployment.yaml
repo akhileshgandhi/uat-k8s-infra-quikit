@@ -61,6 +61,8 @@ spec:
               value: "https://uatinsights.quikit.ai"
             - name: QUIKIT_CLIENT_ID
               value: "quikinsight"
+            - name: CRON_SECRET
+              value: "quikit"
           resources:
             limits:
               cpu: "500m"
