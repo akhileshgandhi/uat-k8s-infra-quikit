@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: attendance
-          image: ghcr.io/akhileshgandhi/quikattendance-runtime:sha-a065009
+          image: ghcr.io/akhileshgandhi/quikattendance-runtime:sha-32278ec
           command:
             - /bin/sh
             - -c
