@@ -70,7 +70,7 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
-              cd /app/apps/projects
+              cd /app/apps/quikprojects
               exec node server.js
           ports:
             - containerPort: 3004
