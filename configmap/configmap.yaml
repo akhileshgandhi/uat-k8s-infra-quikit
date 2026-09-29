@@ -13,7 +13,7 @@ data:
    NEXT_PUBLIC_SUPER_ADMIN_URL: "https://uatorgadmin.quikit.ai"
    NEXT_PUBLIC_QUIKCRM_URL: "https://uatcrm.quikit.ai"
    NEXT_PUBLIC_QUIKKLMS_URL: "https://uatlms.quikit.ai"
-   NEXT_PUBLIC_PROJECTS_URL: "https://uatprojects.quikit.ai"
+   NEXT_PUBLIC_QUIKPROJECTS_URL: "https://uatprojects.quikit.ai"
    NEXT_PUBLIC_QUIKHRMS_URL: "https://uatpeople.quikit.ai"
    NEXT_PUBLIC_QUIKCHAT_URL: "https://uatchat.quikit.ai"
    NEXT_PUBLIC_QUIKSOCKETS_URL: "https://uatsockets.quikit.ai"
