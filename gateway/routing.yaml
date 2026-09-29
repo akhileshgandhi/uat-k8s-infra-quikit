@@ -116,7 +116,7 @@ spec:
   - name: prod-gateway
     namespace: quikit
   hostnames:
-  - uattrack.quikit.ai
+  - uatprojects.quikit.ai
   rules:
   - matches:
     - path:
@@ -587,3 +587,4 @@ spec:
       backendRefs:
         - name: attendance-service
           port: 3022
+
