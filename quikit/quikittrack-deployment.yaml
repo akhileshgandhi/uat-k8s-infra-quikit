@@ -62,7 +62,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: projects
-          image: ghcr.io/akhileshgandhi/quiktrack-runtime:uat-m2
+          image: ghcr.io/akhileshgandhi/quikprojects-runtime:uat-m10
           command:
             - /bin/sh
             - -c
