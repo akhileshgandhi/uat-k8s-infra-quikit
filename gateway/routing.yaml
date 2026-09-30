@@ -588,3 +588,24 @@ spec:
         - name: attendance-service
           port: 3022
 
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-meet
+  namespace: quikit
+spec:
+  parentRefs:
+    - name: prod-gateway
+      namespace: quikit
+  hostnames:
+    - uatmeet.quikit.ai
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: meet-service
+          port: 3023

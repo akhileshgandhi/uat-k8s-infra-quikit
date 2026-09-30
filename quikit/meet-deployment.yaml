@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meet-deployment
+  namespace: quikit
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: meet
+  template:
+    metadata:
+      labels:
+        app: meet
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "global-role"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{- with secret "secret/data/quikit/auth-service" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: meet
+          image: quikmeet  -ghcr.io/akhileshgandhi/quikmeet-runtime:uat-m6
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/apps/quikmeet
+              exec node server.js
+          ports:
+            - containerPort: 3023
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatmeet.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quikmeet"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3023
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3023
+            initialDelaySeconds: 15
+            periodSeconds: 10
