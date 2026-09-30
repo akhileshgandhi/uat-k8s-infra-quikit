@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: meet
-          image: ghcr.io/akhileshgandhi/quikmeet-runtime:uat-m6
+          image: ghcr.io/akhileshgandhi/quikmeet-runtime:uat-m9
           command:
             - /bin/sh
             - -c
