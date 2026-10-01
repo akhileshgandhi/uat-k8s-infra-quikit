@@ -1,0 +1,88 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quikcrm-email-sync
+  namespace: quikit
+  labels:
+    app: quikcrm
+    component: email-sync
+
+spec:
+  # Run every minute
+  schedule: "* * * * *"
+
+  # Do not allow overlapping Jobs
+  concurrencyPolicy: Forbid
+
+  # Do not start old missed schedules after 60 seconds
+  startingDeadlineSeconds: 60
+
+  # Keep the last 3 successful and failed Jobs
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Retry once if the Job fails
+      backoffLimit: 1
+
+      # Stop a hung request before the route's 300 second limit
+      activeDeadlineSeconds: 280
+
+      template:
+        metadata:
+          labels:
+            app: quikcrm
+            component: email-sync
+
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              env:
+                # Use the same CRON_SECRET as the QuikCRM application
+                # and the sequence scheduler.
+                - name: CRON_SECRET
+                  value: "aaja"
+
+                # UAT QuikCRM email synchronization endpoint
+                - name: TARGET_URL
+                  value: "https://uatcrm.quikit.ai/api/email/cron/sync"
+
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+
+                  curl --fail-with-body \
+                       --silent --show-error \
+                       --max-time 270 \
+                       --retry 1 \
+                       --retry-delay 5 \
+                       --retry-connrefused \
+                       -X POST \
+                       -H "Authorization: Bearer ${CRON_SECRET}" \
+                       -H "Content-Type: application/json" \
+                       -H "Content-Length: 0" \
+                       "${TARGET_URL}"
+
+                  echo
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL

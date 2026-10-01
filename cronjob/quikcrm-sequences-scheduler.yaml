@@ -1,0 +1,85 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quikcrm-sequences-scheduler
+  namespace: quikit
+  labels:
+    app: quikcrm
+    component: sequences-scheduler
+
+spec:
+  # Run every 5 minutes
+  schedule: "*/5 * * * *"
+
+  # Do not allow overlapping Jobs
+  concurrencyPolicy: Forbid
+
+  # Do not start an old missed schedule after 2 minutes
+  startingDeadlineSeconds: 120
+
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Retry once if the Job fails
+      backoffLimit: 1
+
+      # Stop a hung Job before the next scheduled execution
+      activeDeadlineSeconds: 280
+
+      template:
+        metadata:
+          labels:
+            app: quikcrm
+            component: sequences-scheduler
+
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              env:
+                - name: CRON_SECRET
+                  value: "aaja"
+
+                - name: TARGET_URL
+                  value: "https://uatcrm.quikit.ai/api/sequences/cron/run"
+
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+
+                  curl --fail-with-body \
+                       --silent --show-error \
+                       --max-time 270 \
+                       --retry 1 \
+                       --retry-delay 15 \
+                       --retry-connrefused \
+                       -X POST \
+                       -H "Authorization: Bearer ${CRON_SECRET}" \
+                       -H "Content-Type: application/json" \
+                       -H "Content-Length: 0" \
+                       "${TARGET_URL}"
+
+                  echo
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+
