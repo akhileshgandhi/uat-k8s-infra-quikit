@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: pdf
-          image: ghcr.io/akhileshgandhi/quikpdf-runtime:sha-1c77b44
+          image: ghcr.io/akhileshgandhi/quikpdf-runtime:sha-c2f895d
           command:
             - /bin/sh
             - -c
