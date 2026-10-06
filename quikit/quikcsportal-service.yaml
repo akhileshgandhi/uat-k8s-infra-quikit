@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: csportal-service
+  namespace: quikit
+spec:
+  selector:
+    app: csportal
+  ports:
+  - protocol: TCP
+    port: 3025
+    targetPort: 3025
+  type: NodePort
