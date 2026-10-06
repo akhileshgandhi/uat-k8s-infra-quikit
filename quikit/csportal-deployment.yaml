@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: csportal
-          image: ghcr.io/akhileshgandhi/quikcsportal-runtime:sha-c2f895d
+          image: ghcr.io/akhileshgandhi/quikcsportal-runtime:sha-07172f6
           command:
             - /bin/sh
             - -c
