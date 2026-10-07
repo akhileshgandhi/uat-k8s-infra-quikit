@@ -43,7 +43,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: chat
-          image: ghcr.io/akhileshgandhi/quikchat-runtime:sha-b56b7fc
+          image: ghcr.io/akhileshgandhi/quikchat-runtime:sha-5c27fcb
           command:
             - /bin/sh
             - -c

@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: sign
-          image: ghcr.io/akhileshgandhi/quiksign-runtime:sha-32278ec
+          image: ghcr.io/akhileshgandhi/quiksign-runtime:sha-5c27fcb
           command:
             - /bin/sh
             - -c
