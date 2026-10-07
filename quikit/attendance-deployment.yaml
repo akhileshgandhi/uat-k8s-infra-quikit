@@ -50,6 +50,8 @@ spec:
               value: "https://uatattendance.quikit.ai"
             - name: QUIKIT_CLIENT_ID
               value: "quikattendance"
+            - name: EMAIL_SENDING_ENABLED
+              value: "true"
           resources:
             limits:
               cpu: "500m"
