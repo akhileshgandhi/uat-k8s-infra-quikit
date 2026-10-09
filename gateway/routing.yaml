@@ -673,3 +673,25 @@ spec:
       backendRefs:
         - name: visionempregistration-service
           port: 7010
+
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-forms
+  namespace: quikit
+spec:
+  parentRefs:
+    - name: prod-gateway
+      namespace: quikit
+  hostnames:
+    - uatforms.quikit.ai
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: forms-service
+          port: 3026
