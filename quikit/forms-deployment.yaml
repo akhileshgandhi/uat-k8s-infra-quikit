@@ -25,6 +25,14 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
+
+        vault.hashicorp.com/agent-inject-secret-forms-config: "secret/data/quikit/forms"
+        vault.hashicorp.com/agent-inject-template-forms-config: |
+          {{- with secret "secret/data/quikit/forms" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}  
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,6 +45,7 @@ spec:
             - |
               set -a
               . /vault/secrets/config
+              . /vault/secrets/forms-config
               set +a
               cd /app/apps/quikforms
               exec node server.js
