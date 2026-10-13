@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: vision
-          image: ghcr.io/akhileshgandhi/quikvision-runtime:uat-m2
+          image: ghcr.io/akhileshgandhi/quikvision-runtime:uat-m3
           command:
             - /bin/sh
             - -c
@@ -38,7 +38,8 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
-              exec node node_modules/next/dist/bin/next start -p 3027 -H 0.0.0.0
+              cd /app/apps/quikvision
+              exec node server.js
           ports:
             - containerPort: 3027
           envFrom:
