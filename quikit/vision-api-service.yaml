@@ -8,6 +8,6 @@ spec:
     app: vision
   ports:
   - protocol: TCP
-    port: 8011
-    targetPort: 8011
+    port: 3027
+    targetPort: 3027
   type: NodePort

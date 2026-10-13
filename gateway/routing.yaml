@@ -718,4 +718,4 @@ spec:
             value: "/"
       backendRefs:
         - name: vision-service
-          port: 8011
+          port: 3027
