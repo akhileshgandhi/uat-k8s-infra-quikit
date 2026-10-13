@@ -46,9 +46,6 @@ spec:
         ports:
         - containerPort: 7010
 
-        envFrom:
-        - configMapRef:
-            name: quikit-config
         
         env:
           - name: NEXTAUTH_URL
