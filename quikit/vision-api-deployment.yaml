@@ -35,10 +35,10 @@ spec:
             - /bin/sh
             - -c
             - |
+              set -e
               set -a
               . /vault/secrets/config
               set +a
-              cd /app/apps/quikvision
               exec node server.js
               
           ports:
