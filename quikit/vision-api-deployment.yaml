@@ -38,6 +38,7 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
+              cd /app/apps/quikvision
               exec node node_modules/next/dist/bin/next start -p 3027 -H 0.0.0.0
           ports:
             - containerPort: 3027
