@@ -38,9 +38,8 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
-              # cd /app/apps/quikvision
-              # exec node server.js
-              exec node node_modules/next/dist/bin/next start -p 3027 -H 0.0.0.0
+              cd /app/apps/quikvision
+              exec node server.js
           ports:
             - containerPort: 3027
           envFrom:
