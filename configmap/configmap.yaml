@@ -31,6 +31,11 @@ data:
    NEXT_PUBLIC_QUIKCSPORTAL_URL: "https://uatcsportal.quikit.ai"
    NEXT_PUBLIC_QUIKFORMS_URL: "https://uatforms.quikit.ai"
    NEXT_PUBLIC_QUIKVISION_URL: "https://uatvision.quikit.ai"
+   NEXT_PUBLIC_QUIKSLIDES_URL: "https://uatslides.quikit.ai"
+   NEXT_PUBLIC_QUIKINVENTORY_URL: "https://uatinventory.quikit.ai"
+   NEXT_PUBLIC_QUIKSHEETS_URL: "https://uatsheets.quikit.ai"
+   NEXT_PUBLIC_QUIKDOCS_URL: "https://uatdocs.quikit.ai"
+   NEXT_PUBLIC_DRIVE_URL: "https://uatdrive.quikit.ai"
    # Server-side mirrors (no NEXT_PUBLIC_ prefix — read by route handlers
    # and lib code that doesn't run in the browser).
    QUIKINSIGHT_URL: "https://uatinsights.quikit.ai"
@@ -54,6 +59,11 @@ data:
    QUIKCSPORTAL_URL: "https://uatcsportal.quikit.ai"
    QUIKFORMS_URL: "https://uatforms.quikit.ai"
    QUIKVISION_URL: "https://uatvision.quikit.ai"
+   QUIKSLIDES_URL: "https://uatslides.quikit.ai"
+   QUIKINVENTORY_URL: "https://uatinventory.quikit.ai"
+   QUIKSHEETS_URL: "https://uatsheets.quikit.ai"
+   QUIKDOCS_URL: "https://uatdocs.quikit.ai"
+   QUIKDRIVE_URL: "https://uatdrive.quikit.ai"
 
    # OAuth issuer (sub-apps point their OIDC client at this).
    QUIKIT_ISSUER_URL: "https://uatapps.quikit.ai"
