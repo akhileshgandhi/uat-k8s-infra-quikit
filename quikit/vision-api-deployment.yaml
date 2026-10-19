@@ -45,6 +45,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://backenduatvision.quikit.ai"   
           resources:
             limits:
               cpu: "500m"
