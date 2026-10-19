@@ -25,6 +25,13 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
+        vault.hashicorp.com/agent-inject-secret-visionapi-config: "secret/data/quikit/visionapi"
+        vault.hashicorp.com/agent-inject-template-visionapi-config: |
+          {{- with secret "secret/data/quikit/visionapi" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}   
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,6 +44,7 @@ spec:
             - |
               set -a
               . /vault/secrets/config
+              . /vault/secrets/visionapi-config
               set +a
               cd /app/apps/quikvision-api
               exec uvicorn main:app --host 0.0.0.0 --port 8011
