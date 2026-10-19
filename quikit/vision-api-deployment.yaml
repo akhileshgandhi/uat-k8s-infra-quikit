@@ -41,7 +41,7 @@ spec:
               cd /app/apps/quikvision-api
               exec node server.js
           ports:
-            - containerPort: 8021
+            - containerPort: 8011
           envFrom:
             - configMapRef:
                 name: quikit-config
@@ -55,12 +55,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: 8021
+              port: 8011
             initialDelaySeconds: 45
             periodSeconds: 20
           readinessProbe:
             httpGet:
               path: /api/health
-              port: 8021
+              port: 8011
             initialDelaySeconds: 15
             periodSeconds: 10

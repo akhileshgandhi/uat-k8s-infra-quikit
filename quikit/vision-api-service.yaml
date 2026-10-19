@@ -8,6 +8,6 @@ spec:
     app: vision-api
   ports:
   - protocol: TCP
-    port: 8021
-    targetPort: 8021
+    port: 8011
+    targetPort: 8011
   type: NodePort
