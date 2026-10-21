@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: inventory
-          image: ghcr.io/akhileshgandhi/quikinventory-runtime:uat-m1
+          image: ghcr.io/akhileshgandhi/quikinventory-runtime:uat-m51
           command:
             - /bin/sh
             - -c
