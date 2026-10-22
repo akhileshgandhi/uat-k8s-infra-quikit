@@ -38,7 +38,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: vision
-          image: ghcr.io/akhileshgandhi/quikvision-runtime:uat-m4
+          image: ghcr.io/akhileshgandhi/quikvision-runtime:uat-m51
           command:
             - /bin/sh
             - -c
