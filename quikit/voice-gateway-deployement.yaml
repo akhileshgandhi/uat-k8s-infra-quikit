@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: voice-gateway
-          image: ghcr.io/akhileshgandhi/quikvoice-gateway-runtime:uat-m51
+          image: ghcr.io/akhileshgandhi/quikvoice-gateway-runtime:uat-m52
           command:
             - /bin/sh
             - -c
