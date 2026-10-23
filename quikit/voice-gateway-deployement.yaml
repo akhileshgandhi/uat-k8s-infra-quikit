@@ -38,8 +38,7 @@ spec:
               set -a
               . /vault/secrets/config
               set +a
-              cd /app/apps/quikvoice-gateway
-              exec node server.js
+              exec node dist/index.js
           ports:
             - containerPort: 3066
           envFrom:
