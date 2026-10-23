@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: purchase
-          image: ghcr.io/akhileshgandhi/quikpurchase-runtime:uat-b02
+          image: ghcr.io/akhileshgandhi/quikpurchase-runtime:uat-b04
           command:
             - /bin/sh
             - -c
