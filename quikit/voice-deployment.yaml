@@ -25,6 +25,13 @@ spec:
           export {{ $k }}="{{ $v }}"
           {{- end }}
           {{- end }}
+        vault.hashicorp.com/agent-inject-secret-voice-app: "secret/data/quikit/voice-app"
+        vault.hashicorp.com/agent-inject-template-voice-app: |
+          {{- with secret "secret/data/quikit/voice-app" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}  
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -37,6 +44,7 @@ spec:
             - |
               set -a
               . /vault/secrets/config
+              . /vault/secrets/voice-app
               set +a
               cd /app/apps/quikvoice
               exec node server.js
