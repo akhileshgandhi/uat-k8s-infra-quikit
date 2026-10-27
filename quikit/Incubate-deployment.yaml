@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incubate-deployment
+  namespace: quikit
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: incubate
+  template:
+    metadata:
+      labels:
+        app: incubate
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "global-role"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{- with secret "secret/data/quikit/auth-service" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: incubate
+          image: ghcr.io/akhileshgandhi/quikincubate-runtime:uat-m51
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              set +a
+              cd /app/apps/quikincubate
+              exec node server.js
+          ports:
+            - containerPort: 3038
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://uatincubate.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quikincubate"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3038
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3038
+            initialDelaySeconds: 15
+            periodSeconds: 10

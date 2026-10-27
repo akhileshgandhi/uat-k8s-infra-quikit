@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: incubate-service
+  namespace: quikit
+spec:
+  selector:
+    app: incubate
+  ports:
+  - protocol: TCP
+    port: 3038
+    targetPort: 3038
+  type: NodePort
