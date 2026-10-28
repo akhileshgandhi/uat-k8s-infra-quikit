@@ -1,0 +1,80 @@
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quiksocial-connection-health
+  namespace: quikit
+spec:
+  # Daily at 08:00 UTC = 13:30 IST
+  schedule: "0 8 * * *"
+
+  # Do not start a new job if the previous one is still running
+  concurrencyPolicy: Forbid
+
+  # Skip if the job misses its scheduled time by more than 10 minutes
+  startingDeadlineSeconds: 600
+
+  # Keep the last 3 successful jobs
+  successfulJobsHistoryLimit: 3
+
+  # Keep the last 3 failed jobs
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Maximum time the Job is allowed to run
+      activeDeadlineSeconds: 300
+
+      # Retry once if the Job fails
+      backoffLimit: 1
+
+      template:
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              
+              args:
+                - "-sS"
+                - "--fail-with-body"
+                - "--max-time"
+                - "290"
+                - "--retry"
+                - "1"
+                - "--retry-delay"
+                - "15"
+                - "--retry-connrefused"
+                - "-X"
+                - "POST"
+                - "-H"
+                - "Authorization: Bearer $(CRON_SECRET)"
+                - "-d"
+                - ""
+                - "https://uatsocial.quikit.ai/api/cron/connection-health"
+
+
+              env:
+                - name: CRON_SECRET
+                  value: "quikit"
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+             
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 100
+                capabilities:
+                  drop:
+                    - ALL
+

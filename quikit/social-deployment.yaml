@@ -58,6 +58,8 @@ spec:
               value: "https://uatsocial.quikit.ai"
             - name: QUIKIT_CLIENT_ID
               value: "quiksocial"
+            - name: CRON_SECRET
+              value: "quikit"
           resources:
             limits:
               cpu: "500m"
