@@ -30,7 +30,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: slides
-          image: ghcr.io/akhileshgandhi/quikslides-runtime:uat-m51
+          image: ghcr.io/akhileshgandhi/quikslides-runtime:uat-m61
           command:
             - /bin/sh
             - -c
