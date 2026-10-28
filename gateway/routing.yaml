@@ -947,3 +947,26 @@ spec:
       backendRefs:
         - name: incubate-service
           port: 3038
+
+
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-routing-social
+  namespace: quikit
+spec:
+  parentRefs:
+    - name: prod-gateway
+      namespace: quikit
+  hostnames:
+    - uatsocial.quikit.ai
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: social-service
+          port: 3007
