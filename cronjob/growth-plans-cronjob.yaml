@@ -1,0 +1,76 @@
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quiksocial-growth-plans
+  namespace: quikit
+
+spec:
+  # Every Monday at 06:00 UTC = 11:30 AM IST
+  schedule: "0 6 * * 1"
+
+  # Do not start a new Job if the previous one is still running
+  concurrencyPolicy: Forbid
+
+  # Allow up to 1 hour for a missed scheduled execution
+  startingDeadlineSeconds: 3600
+
+  # Keep the last 3 successful Jobs
+  successfulJobsHistoryLimit: 3
+
+  # Keep the last 3 failed Jobs
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Do not retry automatically because each plan can incur AI costs
+      backoffLimit: 0
+
+      # Maximum time the Job is allowed to run
+      activeDeadlineSeconds: 900
+
+      template:
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+                  curl --fail-with-body --silent --show-error \
+                       --max-time 880 \
+                       -X POST \
+                       -H "Authorization: Bearer ${CRON_SECRET}" \
+                       -d "" \
+                       "${TARGET_URL}"
+                  echo
+
+              env:
+                - name: CRON_SECRET
+                  value: "quikit"
+
+                - name: TARGET_URL
+                  value: "https://uatsocial.quikit.ai/api/cron/refresh-growth-plans"
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 100
+                capabilities:
+                  drop:
+                    - ALL
