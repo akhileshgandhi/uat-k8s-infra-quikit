@@ -9,22 +9,14 @@ spec:
   schedule: "0 3 * * *"
   timeZone: "Asia/Kolkata"
 
-  # Do not overlap with a previous run
   concurrencyPolicy: Forbid
-
-  # Allow a missed run to start within 3 hours
   startingDeadlineSeconds: 10800
-
-  # Keep the last 3 successful and failed jobs
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
 
   jobTemplate:
     spec:
-      # Maximum time the Job can run
       activeDeadlineSeconds: 900
-
-      # Retry once if the Job fails
       backoffLimit: 1
 
       template:
@@ -48,9 +40,11 @@ spec:
                 - "--retry-connrefused"
                 - "-X"
                 - "POST"
+                - "--data"
+                - ""
                 - "-H"
                 - "Authorization: Bearer $(CRON_SECRET)"
-                - "http://auth.quikit.svc.cluster.local:3001/api/internal/org-inactivity/daily"
+                - "https://uatauthn.quikit.ai/api/internal/org-inactivity/daily"
 
               env:
                 - name: CRON_SECRET
