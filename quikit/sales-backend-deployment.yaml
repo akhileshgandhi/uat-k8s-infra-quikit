@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sales-backend-deployment
+  namespace: quikit
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sales-backend
+  template:
+    metadata:
+      labels:
+        app: sales-backend
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "global-role"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/data/quikit/auth-service"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{- with secret "secret/data/quikit/auth-service" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-sales-backend: "secret/data/quikit/sales-backend"
+        vault.hashicorp.com/agent-inject-template-sales-backend: |
+          {{- with secret "secret/data/quikit/sales-backend" -}}
+          {{- range $k, $v := .Data.data }}
+          export {{ $k }}="{{ $v }}"
+          {{- end }}
+          {{- end }}
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: sales-backend
+          image: ghcr.io/akhileshgandhi/quiksales-api-runtime:uat-m61
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -a
+              . /vault/secrets/config
+              . /vault/secrets/sales-backend
+              set +a
+              cd /app/apps/quiksales-backend
+              exec node server.js
+          ports:
+            - containerPort: 8010
+          envFrom:
+            - configMapRef:
+                name: quikit-config
+          env:
+            - name: NEXTAUTH_URL
+              value: "https://backendquiksales.quikit.ai"
+            - name: QUIKIT_CLIENT_ID
+              value: "quiksales-backend"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8010
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8010
+            initialDelaySeconds: 15
+            periodSeconds: 10
