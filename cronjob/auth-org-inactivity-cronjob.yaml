@@ -1,0 +1,73 @@
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: auth-org-inactivity
+  namespace: quikit
+spec:
+  # Run every day at 03:00 IST
+  schedule: "0 3 * * *"
+  timeZone: "Asia/Kolkata"
+
+  # Do not overlap with a previous run
+  concurrencyPolicy: Forbid
+
+  # Allow a missed run to start within 3 hours
+  startingDeadlineSeconds: 10800
+
+  # Keep the last 3 successful and failed jobs
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      # Maximum time the Job can run
+      activeDeadlineSeconds: 900
+
+      # Retry once if the Job fails
+      backoffLimit: 1
+
+      template:
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: trigger
+              image: curlimages/curl:8.10.1
+
+              args:
+                - "--silent"
+                - "--show-error"
+                - "--fail-with-body"
+                - "--max-time"
+                - "600"
+                - "--retry"
+                - "2"
+                - "--retry-delay"
+                - "30"
+                - "--retry-connrefused"
+                - "-X"
+                - "POST"
+                - "-H"
+                - "Authorization: Bearer $(CRON_SECRET)"
+                - "http://auth.quikit.svc.cluster.local:3001/api/internal/org-inactivity/daily"
+
+              env:
+                - name: CRON_SECRET
+                  value: "quikit"
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                capabilities:
+                  drop:
+                    - ALL

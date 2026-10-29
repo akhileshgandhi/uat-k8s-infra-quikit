@@ -37,7 +37,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: voice
-          image: ghcr.io/akhileshgandhi/quikvoice-runtime:uat-m53
+          image: ghcr.io/akhileshgandhi/quikvoice-runtime:uat-m54
           command:
             - /bin/sh
             - -c
