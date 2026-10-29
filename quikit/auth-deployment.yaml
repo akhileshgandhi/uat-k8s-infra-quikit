@@ -74,6 +74,8 @@ spec:
           env:
             - name: NEXTAUTH_URL
               value: "https://uatauthn.quikit.ai"
+            - name: CRON_SECRET
+              value: "quikit"
           resources:
             limits:
               cpu: "500m"
