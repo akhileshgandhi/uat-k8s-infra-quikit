@@ -37,7 +37,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: seo-backend
-          image: ghcr.io/akhileshgandhi/quikseo-api-runtime:uat-m63
+          image: ghcr.io/akhileshgandhi/quikseo-api-runtime:uat-m61
           command:
             - /bin/sh
             - -c
