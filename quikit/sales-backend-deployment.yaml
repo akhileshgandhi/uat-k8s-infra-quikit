@@ -47,7 +47,7 @@ spec:
               . /vault/secrets/sales-backend
               set +a
               cd /app/apps/quiksales-backend
-              exec node server.js
+              exec uvicorn api.main:app --host 0.0.0.0 --port "${PORT:-8010}"
           ports:
             - containerPort: 8010
           envFrom:
