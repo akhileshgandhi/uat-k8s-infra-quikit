@@ -47,7 +47,7 @@ spec:
       containers:
         - name: seo-backend
 
-          image: ghcr.io/akhileshgandhi/quikseo-api-runtime:uat-m61
+          image: ghcr.io/akhileshgandhi/quikseo-api-runtime:uat-m63
 
           imagePullPolicy: IfNotPresent
 
