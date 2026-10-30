@@ -47,7 +47,7 @@ spec:
               . /vault/secrets/seo-backend
               set +a
               cd /app/apps/quikseo-backend
-              exec node server.js
+              exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8029} --proxy-headers --forwarded-allow-ips='*'
           ports:
             - containerPort: 8029
           envFrom:
