@@ -55,7 +55,7 @@ spec:
                 name: quikit-config
           env:
             - name: NEXTAUTH_URL
-              value: "https://backendquiksales.quikit.ai"
+              value: "https://uatbackendsales.quikit.ai"
             - name: QUIKIT_CLIENT_ID
               value: "quiksales-backend"
           resources:

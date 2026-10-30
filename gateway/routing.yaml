@@ -983,7 +983,7 @@ spec:
     - name: prod-gateway
       namespace: quikit
   hostnames:
-    - uatquiksales.quikit.ai
+    - uatsales.quikit.ai
   rules:
     - matches:
         - path:
@@ -1006,7 +1006,7 @@ spec:
     - name: prod-gateway
       namespace: quikit
   hostnames:
-    - backendquiksales.quikit.ai
+    - uatbackendsales.quikit.ai
   rules:
     - matches:
         - path:
