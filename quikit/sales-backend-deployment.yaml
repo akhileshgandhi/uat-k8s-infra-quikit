@@ -37,7 +37,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: sales-backend
-          image: ghcr.io/akhileshgandhi/quiksales-api-runtime:uat-m61
+          image: ghcr.io/akhileshgandhi/quiksales-api-runtime:uat-m62
           command:
             - /bin/sh
             - -c
