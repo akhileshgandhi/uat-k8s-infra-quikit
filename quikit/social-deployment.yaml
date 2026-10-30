@@ -37,7 +37,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: social
-          image: ghcr.io/akhileshgandhi/quiksocial-runtime:uat-m63
+          image: ghcr.io/akhileshgandhi/quiksocial-runtime:uat-m64
           command:
             - /bin/sh
             - -c
